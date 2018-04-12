@@ -1,0 +1,10 @@
+{
+  "name": "starterpack-ijemmao",
+  "version": "1.0.0",
+  "description": "short assignment 3",
+  "main": "index.js",
+  "repository": "https://github.com/dartmouth-cs52-18S/starterpack-ijemmao.git",
+  "author": "ijemmaonwuzulike10@gmail.com",
+  "license": "MIT",
+  "private": null
+}
