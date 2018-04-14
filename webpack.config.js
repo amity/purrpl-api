@@ -31,15 +31,15 @@ module.exports = {
             },
           },
           {
-            loader: 'sass-loader',
+            loader: 'postcss-loader',
             options: {
+              plugins: () => [autoprefixer()],
               sourceMap: true,
             },
           },
           {
-            loader: 'postcss-loader',
+            loader: 'sass-loader',
             options: {
-              plugins: () => [autoprefixer()],
               sourceMap: true,
             },
           },
