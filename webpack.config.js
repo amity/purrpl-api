@@ -67,6 +67,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: './index.html',
+      filename: './200.html',
     }),
   ],
 };
