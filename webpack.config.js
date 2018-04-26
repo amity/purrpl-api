@@ -77,7 +77,7 @@ if (env === 'development') {
     content: [__dirname],
     add: (app, middleware, options) => {
       const historyOptions = {
-        index: '/index.html',
+        index: '/200.html',
       };
       app.use(convert(history(historyOptions)));
     },
