@@ -1,6 +1,8 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const autoprefixer = require('autoprefixer')
+const history = require('connect-history-api-fallback');
+const convert = require('koa-connect');
 
 const env = process.env.NODE_ENV || 'development'
 
@@ -8,6 +10,7 @@ const finalCSSLoader = (env === 'production') ? MiniCssExtractPlugin.loader : { 
 
 module.exports = {
   mode: env,
+  output: { publicPath: '/' },
   entry: ['babel-polyfill', './src'],
   devtool: 'source-map',
   module: {
@@ -67,3 +70,15 @@ module.exports = {
     }),
   ],
 };
+
+if (env === 'development') {
+  module.exports.serve = {
+    content: [__dirname],
+    add: (app, middleware, options) => {
+      const historyOptions = {
+        index: '/index.html',
+      };
+      app.use(convert(history(historyOptions)));
+    },
+  };
+}
