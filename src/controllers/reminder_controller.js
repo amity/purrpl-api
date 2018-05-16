@@ -1,7 +1,7 @@
 import Reminder from './../models/reminder_model'
 
 export const newReminder = (req, res) => {
-  const userId = req.body.user
+  const userId = req.body.userId
   const type = req.body.type
   const frequency = req.body.type
   const time = req.body.time
