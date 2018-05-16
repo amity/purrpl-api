@@ -1,37 +1,50 @@
 import { Router } from 'express'
-// import * as User from './controllers/user_controller'
+import * as User from './controllers/user_controller'
 // import * as Post from './controllers/post_controller'
 // import { requireAuth, requireSignin } from './services/passport'
 
 const router = Router()
 
 router.get('/', (req, res) => {
-  console.log('ok')
   res.json({ message: 'welcome to our blog api' })
 })
 
-// router.route('/posts')
-//   .get((req, res) => {
-//     Post.getPosts(req, res)
-//   })
-//   .post(requireAuth, Post.createPost)
+router.route('/friends/:id')
+  .get((req, res) => {
+    // get user's friends
+  })
+  .post((req, res) => {
+    // add a new friend
+  })
+  .delete((req, res) => {
+    // delete a certain friend
+  })
 
-// router.route('/posts/:id')
-//   .get((req, res) => {
-//     Post.getPost(req, res)
-//   })
-//   .put(requireAuth, Post.updatePost)
-//   .delete(requireAuth, Post.deletePost)
+router.route('/user/:id')
+  .get((req, res) => {
+    // get user object
+  })
+  .put((req, res) => {
+    // update the user
+  })
 
-// router.post('/signin', User.signin)
-// router.post('/signup', User.signup)
+router.route('/reminders/:id')
+  .get((req, res) => {
+    // get user's reminders
+  })
+  .post((req, res) => {
+    // create new reminder
+  })
+  .put((req, res) => {
+    // update existing reminders
+  })
 
-// router.route('/comments/:id')
-//   .get((req, res) => {
-//     Post.getPost(req, res)
-//   })
-//   .post((req, res) => {
-//     Post.createComment(req, res)
-//   })
+router.route('/progress/:id')
+  .get((req, res) => {
+    // get user's progress
+  })
+  .put((req, res) => {
+    // update user's progress
+  })
 
 export default router
