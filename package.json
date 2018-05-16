@@ -1,6 +1,6 @@
 {
   "name": "example_express_with_es6",
-  "version": "2.0.0",
+  "version": "1.6.0",
   "description": "",
   "author": "",
   "main": "src/server.js",
