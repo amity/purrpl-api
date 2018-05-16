@@ -22,6 +22,7 @@ export const signup = (req, res, next) => {
     return res.status(422).send('You must provide an email and password')
   }
 
+  // checks to see if user already exists
   User.findOne({ username })
     .then((userEmail) => {
       if (userEmail) res.status(409).send('User already exists')
