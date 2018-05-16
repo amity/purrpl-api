@@ -1,40 +1,33 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import path from 'path'
+import morgan from 'morgan'
+import mongoose from 'mongoose'
+import apiRouter from './router'
 
-// initialize
-const app = express();
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/blog'
+mongoose.connect(mongoURI)
+mongoose.Promise = global.Promise
 
-// enable/disable cross origin resource sharing if necessary
-app.use(cors());
+const app = express()
 
-// enable/disable http request logging
-app.use(morgan('dev'));
+app.use(cors())
 
-// enable only if you want templating
-app.set('view engine', 'ejs');
+app.use(morgan('dev'))
+app.set('view engine', 'ejs')
+app.use(express.static('static'))
+app.set('views', path.join(__dirname, '../src/views'))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-// enable only if you want static assets from folder static
-app.use(express.static('static'));
+app.use('/api', apiRouter)
 
-// this just allows us to render ejs from the ../app/views directory
-app.set('views', path.join(__dirname, '../src/views'));
-
-// enable json message body for posting data to API
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-
-// default index route
 app.get('/', (req, res) => {
-  res.send('hi');
-});
+  res.send('hi')
+})
 
-// START THE SERVER
-// =============================================================================
-const port = process.env.PORT || 9090;
-app.listen(port);
+const port = process.env.PORT || 9090
+app.listen(port)
 
-console.log(`listening on: ${port}`);
+console.log(`listening on: ${port}`)
