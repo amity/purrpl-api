@@ -1,4 +1,11 @@
-# project-api-black-mirror
+# Purple Gorilla 🦍
 
+## Architecture 🛠
 
-API side for Black Mirror (tentative name). Scaffolding: Basic starterpack + mongoDB + express.
+## Setup 🚀
+
+## Deployment 🛳
+
+## Authors 📝
+
+## Acknowledgments 🤓
