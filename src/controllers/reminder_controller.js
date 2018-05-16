@@ -12,11 +12,17 @@ export const newReminder = (req, res) => {
   }
 
   // checks to see if reminder already exists
-  User.findOne({ userId, type })
+  Reminder.findOne({ userId, type })
     .then((dbReminder) => {
       if (dbReminder) res.status(409).send('Reminder already exists')
-      
-      const reminder = new Reminder({ userId, type, frequency, times, toggle })
+
+      const reminder = new Reminder({
+        userId,
+        type,
+        frequency,
+        time,
+        toggle,
+      })
       reminder.save()
         .then((result) => {
           return res.send({ reminder })
