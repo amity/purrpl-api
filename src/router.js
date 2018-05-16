@@ -1,7 +1,4 @@
 import { Router } from 'express'
-import * as User from './controllers/user_controller'
-// import * as Post from './controllers/post_controller'
-// import { requireAuth, requireSignin } from './services/passport'
 
 const router = Router()
 
