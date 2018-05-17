@@ -4,9 +4,9 @@ const ReminderSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   type: { type: String },
   frequency: { type: Number },
-  times: [{ type: Date }],
+  times: [{ type: Object }], // dictionary? time : done
   toggle: { type: Boolean },
-  completion: [{ type: Boolean }], // Should contain { Date, Int }
+  // completion: [{ type: Boolean }], // Should contain { Date, Int }
 })
 
 ReminderSchema.set('toJSON', {
