@@ -3,10 +3,10 @@ import mongoose, { Schema } from 'mongoose'
 const ReminderSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   type: { type: String },
-  frequency: { type: String },
+  frequency: { type: Number },
   times: [{ type: Date }],
   toggle: { type: Boolean },
-  completion: [{ type: Object }], // Should contain { Date, Int }
+  completion: [{ type: Boolean }], // Should contain { Date, Int }
 })
 
 ReminderSchema.set('toJSON', {
