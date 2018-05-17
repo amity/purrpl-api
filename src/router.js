@@ -1,10 +1,17 @@
 import { Router } from 'express'
+import * as UserController from './controllers/user_controller';
+import { requireSignin } from './services/passport';
 
 const router = Router()
 
 router.get('/', (req, res) => {
   res.json({ message: 'welcome to our blog api' })
 })
+
+// TODO: requireAuth, add secret key .env
+
+router.post('/signin', requireSignin, UserController.signin);
+router.post('/signup', UserController.signup);
 
 router.route('/friends/:id')
   .get((req, res) => {
