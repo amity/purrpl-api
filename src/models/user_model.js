@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
 
-import Reminder from './reminder_model'
-
 const UserSchema = new Schema({
   name: { type: String, required: true },
   username: { type: String, required: true },
@@ -10,7 +8,7 @@ const UserSchema = new Schema({
   // users: [{ type: User }],
   plant: { type: Number },
   // overallProgress: { type: Progress },
-  reminders: [{ type: Reminder }],
+  reminders: [{ type: Schema.Types.ObjectId, ref: 'Reminder' }],
   receivedAction: { type: Boolean },
 })
 
