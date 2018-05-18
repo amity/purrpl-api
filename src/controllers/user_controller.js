@@ -9,6 +9,18 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user._id, iat: timestamp }, process.env.AUTH_SECRET)
 }
 
+export const getUsers = (req, res) => {
+  console.log(req.body)
+  const regex = `/\b${req.body.search}\S*/`
+  console.log('howdy', regex)
+  User
+    .aggregate([{ $match: { username: { $regex: regex } } }])
+    .exec((err, users) => {
+      if (err) res.status(500).json({ err })
+      return users.map((item) => { return { id: item._id, name: item.name, username: item.username } })
+    })
+}
+
 export const signin = (req, res, next) => {
   res.send({ token: tokenForUser(req.user) })
 }

@@ -33,6 +33,12 @@ router.route('/friends/:id')
     res.send({ message: 'delete a certain friend' })
   })
 
+router.route('/users')
+  .get((req, res) => {
+    // get all users
+    UserController.getUsers(req, res)
+  })
+
 router.route('/user/:id')
   .get((req, res) => {
     // get user object
