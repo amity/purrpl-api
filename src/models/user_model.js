@@ -6,6 +6,7 @@ const UserSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   // users: [{ type: User }],
+  notifications: [{ type: Object }],
   plant: { type: Number },
   friends: [{ type: Schema.Types.ObjectId, ref: 'Friends' }],
   // overallProgress: { type: Progress },

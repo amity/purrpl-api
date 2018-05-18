@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.use('/api', apiRouter)
 
 app.get('/', (req, res) => {
-  res.send('hi')
+  res.send('Welcome to Purple Gorilla, an app for self-care! This is the API. To use the app, please download the client using Expo.')
 })
 
 // START THE SERVER

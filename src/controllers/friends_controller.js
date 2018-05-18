@@ -36,6 +36,26 @@ export const deleteFriend = (req, res) => {
   User.findById(req.params.id)
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
-      
+
+      User.findOne({ username: req.body.username })
+        .exec((err1, friend) => {
+          user.set({ friends: user.friends.filter((item) => { return item !== friend.id }) })
+        })
+    })
+}
+
+export const sendAction = (req, res) => {
+  User.findOne(req.body.username)
+    .exec((err, user) => {
+      if (err) res.status(500).json({ err })
+      const newNotifications = [...user.notifications, res.body.action ]
+      user.set({ notifications: newNotifications })
+      user.save()
+        .then((result) => {
+          res.json(result)
+        })
+        .catch((error) => {
+          res.result(500).json({ error })
+        })
     })
 }
