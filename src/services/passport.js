@@ -4,7 +4,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 
 import User from '../models/user_model'
 
-const localOptions = { usernameField: 'email' }
+const localOptions = { usernameField: 'username' }
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
@@ -24,8 +24,8 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   })
 })
 
-const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
-  User.findOne({ email }, (err, user) => {
+const localLogin = new LocalStrategy(localOptions, (username, password, done) => {
+  User.findOne({ username }, (err, user) => {
     if (err) { return done(err) }
 
     if (!user) { return done(null, false) }

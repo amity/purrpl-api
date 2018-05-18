@@ -14,26 +14,41 @@ export const signin = (req, res, next) => {
 }
 
 export const signup = (req, res, next) => {
-  const name = req.body.name
-  const username = req.body.username
-  const password = req.body.password
+  console.log('signing up');
 
-  if (!username || !password) {
-    return res.status(422).send('You must provide an email and password')
+  console.log(req)
+
+  const { name, username, password } = req.body;
+
+  if (!name || !username || !password) {
+    return res.status(422).send('You must provide name, username, and password');
   }
 
-  // checks to see if user already exists
   User.findOne({ username })
-    .then((userEmail) => {
-      if (userEmail) res.status(409).send('User already exists')
-
-      const user = new User({ name, username, password })
-      user.save()
-        .then((result) => {
-          return res.send({ token: tokenForUser(user) })
-        })
-        .catch((error) => {
-          res.status(500).json({ error });
-        })
+    .then((data) => {
+      if (data == null) {
+        const user = new User();
+        user.name = name;
+        user.username = username;
+        user.password = password;
+        user.save()
+          .then((response) => {
+            res.send({ token: tokenForUser(user) });
+          })
+          .catch((err) => {
+            if (err) {
+              console.log(err)
+              res.sendStatus(500);
+            }
+          });
+      } else {
+        res.status(422).send('User already exists');
+      }
     })
+    .catch((err) => {
+      console.log(err)
+      res.sendStatus(500);
+    });
+
+  return next;
 }
