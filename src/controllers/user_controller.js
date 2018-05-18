@@ -14,10 +14,6 @@ export const signin = (req, res, next) => {
 }
 
 export const signup = (req, res, next) => {
-  console.log('signing up');
-
-  console.log(req)
-
   const { name, username, password } = req.body;
 
   if (!name || !username || !password) {
