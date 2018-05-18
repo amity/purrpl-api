@@ -51,17 +51,17 @@ export const deleteFriend = (req, res) => {
 }
 
 export const sendAction = (req, res) => {
-  User.findOne(req.body.username)
+  User.findOne({ username: req.body.username })
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
-      const newNotifications = [...user.notifications, res.body.action ]
-      user.set({ notifications: newNotifications })
+      user.notifications.push(req.body.action)
+      user.set({ notifications: user.notifications })
       user.save()
         .then((result) => {
           res.json(result)
         })
         .catch((error) => {
-          res.result(500).json({ error })
+          res.status(500).json({ error })
         })
     })
 }

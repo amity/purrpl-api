@@ -26,7 +26,7 @@ router.route('/friends/:id')
   })
   .put((req, res) => {
     // sends new notification
-    res.send({ message: 'send new notification '})
+    Friends.sendAction(req, res)
   })
   .delete((req, res) => {
     // delete a certain friend
