@@ -18,7 +18,6 @@ router.post('/signup', UserController.signup);
 router.route('/friends/:id')
   .get((req, res) => {
     // get user's friends
-    // res.send({ message: 'get user\'s friends' })
     Friends.getFriends(req, res)
   })
   .post((req, res) => {
