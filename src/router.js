@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as UserController from './controllers/user_controller';
+import * as Reminders from './controllers/reminder_controller';
 import { requireSignin } from './services/passport';
 
 const router = Router()
@@ -37,19 +38,13 @@ router.route('/user/:id')
     res.send({ message: 'update the user' })
   })
 
+router.route('/reminders')
+  .post(Reminders.createReminder) // create reminder, pass in info
+  .get(Reminders.getReminders); // get all of user's reminders, pass in user
+
 router.route('/reminders/:id')
-  .get((req, res) => {
-    // get user's reminders
-    res.send({ message: 'get user\'s reminders' })
-  })
-  .post((req, res) => {
-    // create new reminder
-    res.send({ message: 'create new reminder' })
-  })
-  .put((req, res) => {
-    // update existing reminders
-    res.send({ message: 'update existing reminders' })
-  })
+  .get(Reminders.getReminder) // get a single reminder using id
+  .put(Reminders.updateReminder) // update a single reminder using id and fields
 
 router.route('/progress/:id')
   .get((req, res) => {
