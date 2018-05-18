@@ -28,7 +28,13 @@ export const getFriends = (req, res) => {
   User.findById(req.params.id)
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
-      res.send(user.friends)
+      const friendPromises = user.friends.map((friendId) => {
+        return User.findById(friendId)
+      })
+
+      Promise.all(friendPromises).then((values) => {
+        res.send(values.map((item) => { return { id: item._id, name: item.name, username: item.username } }))
+      })
     })
 }
 

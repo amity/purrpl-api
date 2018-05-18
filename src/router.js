@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
+import * as Friends from './controllers/friends_controller';
 import { requireSignin } from './services/passport';
 
 const router = Router()
@@ -17,7 +18,8 @@ router.post('/signup', UserController.signup);
 router.route('/friends/:id')
   .get((req, res) => {
     // get user's friends
-    res.send({ message: 'get user\'s friends' })
+    // res.send({ message: 'get user\'s friends' })
+    Friends.getFriends(req, res)
   })
   .post((req, res) => {
     // add a new friend
