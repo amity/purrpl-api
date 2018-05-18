@@ -6,7 +6,7 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import apiRouter from './router'
 
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/blog'
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/blackmirror'
 mongoose.connect(mongoURI)
 mongoose.Promise = global.Promise
 
