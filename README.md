@@ -1,4 +1,6 @@
 # Purple Gorilla 🦍
+API backend for a React Native app for self-care!
+
 
 ## Architecture 🛠
   ### Models and Controllers:
