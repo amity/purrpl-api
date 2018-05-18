@@ -1,6 +1,27 @@
 # Purple Gorilla 🦍
 
 ## Architecture 🛠
+  ### Models and Controllers:
+  * Progress
+  * Reminders
+  * Users
+  
+  ### Routes:
+  * Sign in
+  * Sign up
+  * Friends(ID):
+    * Get (Get user's friends)
+    * Post (Add friend)
+    * Delete (Delete friend)
+  * User(ID):
+    * Get (Get User object)
+    * Put (Update User)
+  * Reminders: 
+    * Post (Create reminder)
+    * Get (Get user's reminders)
+  * Progress:
+    * Get (Get user's progress)
+    * Put (Update user's progress)
 
 ## Setup 🚀
 
@@ -13,9 +34,11 @@ yarn dev
 
 ## Deployment 🛳
 
-```bash
-yarn
-yarn start
+Deployed at https://project-api-black-mirror.herokuapp.com/.
+
+Deployment is through 
+```
+prod: yarn build; node src/server.js
 ```
 
 ## Authors 📝
@@ -27,3 +50,4 @@ yarn start
 * Sofia Stanescu-Bellu '20
 
 ## Acknowledgments 🤓
+Thanks to Tim!!!!!!!!!!!!!!
