@@ -10,21 +10,35 @@ function tokenForUser(user) {
 }
 
 export const getUsers = (req, res) => {
+  const userId = req.params.id
   const searchTerm = req.params.search
+  // searching for all users
   User.find({})
     .exec((err, users) => {
       if (err) res.status(500).json({ err })
-      const foundUsers = users.filter((user) => {
-        return user.username.substring(0, searchTerm.length) === searchTerm
-      })
-      res.json(foundUsers.map((item) => {
-        return {
-          id: item._id,
-          name: item.name,
-          username: item.username,
-          key: item._id,
-        }
-      }))
+      // searching for the main user
+      User.findById(userId)
+        .exec((err1, masterUser) => {
+          if (err1) res.status(500).json({ err })
+          // creating a list of all users that start with searchTerm
+          const foundUsers = users.filter((user) => {
+            return user.username.substring(0, searchTerm.length) === searchTerm
+          })
+          res.json(foundUsers.map((item) => {
+            const friendIds = masterUser.friends.map((friendId) => { return friendId.toString() })
+            let isFriend = false
+            if (friendIds.includes(item._id.toString())) {
+              isFriend = true
+            }
+            return {
+              id: item._id,
+              name: item.name,
+              username: item.username,
+              key: item._id,
+              isFriend,
+            }
+          }))
+        })
     })
 }
 
