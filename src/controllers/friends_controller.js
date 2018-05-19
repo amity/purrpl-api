@@ -2,26 +2,23 @@ import User from './../models/user_model'
 
 export const createFriend = (req, res) => {
   const userId = req.params.id
-  const friendUsername = req.body.friendUsername
+  const friendUsername = req.body.username
 
   // finding the main user
-  User.findOne({ id: userId })
+  User.findById(userId)
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // searching for user in database
       User.findOne({ username: friendUsername })
         .exec((err1, friend) => {
           if (err1) res.status(500).json({ err })
-          // if these two users aren't friends, add each other to friends list
-          if (!user.friends.include(friend.id) && friend.friends.include(user.id)) {
+          const friendIds = user.friends.map((friendId) => { return friendId.toString() })
+          if (!friendIds.includes(friend.id.toString())) {
             user.friends.push(friend.id)
-            friend.friends.push(user.id)
-            const users = [user, friend]
-            const saveUsersPromises = users.map((item) => {
-              item.save()
-            })
-            Promise.all(saveUsersPromises).then((values) => {
-              res.send(values)
+            user.save().then((result) => {
+              res.send(result)
+            }).catch((error) => {
+              res.status(500).json({ err })
             })
           }
         })

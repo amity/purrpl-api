@@ -22,7 +22,7 @@ router.route('/friends/:id')
   })
   .post((req, res) => {
     // add a new friend
-    res.send({ message: 'add a new friend' })
+    Friends.createFriend(req, res)
   })
   .put((req, res) => {
     // sends new notification
