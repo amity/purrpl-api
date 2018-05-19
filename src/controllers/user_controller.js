@@ -10,14 +10,21 @@ function tokenForUser(user) {
 }
 
 export const getUsers = (req, res) => {
-  console.log(req.body)
-  const regex = `/\b${req.body.search}\S*/`
-  console.log('howdy', regex)
-  User
-    .aggregate([{ $match: { username: { $regex: regex } } }])
+  const searchTerm = req.params.search
+  User.find({})
     .exec((err, users) => {
       if (err) res.status(500).json({ err })
-      return users.map((item) => { return { id: item._id, name: item.name, username: item.username } })
+      const foundUsers = users.filter((user) => {
+        return user.username.substring(0, searchTerm.length) === searchTerm
+      })
+      res.json(foundUsers.map((item) => {
+        return {
+          id: item._id,
+          name: item.name,
+          username: item.username,
+          key: item._id,
+        }
+      }))
     })
 }
 
