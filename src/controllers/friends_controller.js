@@ -47,9 +47,20 @@ export const deleteFriend = (req, res) => {
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // finds the friend to delete
-      User.findOne({ username: req.body.username })
+      User.findOne({ username: req.params.username })
         .exec((err1, friend) => {
-          user.set({ friends: user.friends.filter((item) => { return item !== friend.id }) })
+          user.set({ friends: user.friends.filter((item) => { return item.toString() !== friend.id.toString() }) })
+          friend.set({ friends: friend.friends.filter((item) => { return item.toString() !== user.id.toString() }) })
+          const saveUsers = [user, friend]
+          const saveUsersPromises = saveUsers.map((item) => {
+            return item.save()
+          })
+
+          Promise.all(saveUsersPromises).then((values) => {
+            res.send(values)
+          }).catch((error) => {
+            res.status(500).json({ error })
+          })
         })
     })
 }
