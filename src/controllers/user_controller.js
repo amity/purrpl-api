@@ -62,11 +62,15 @@ export const signup = (req, res, next) => {
         user.password = password;
         user.save()
           .then((response) => {
-            res.send({ token: tokenForUser(user) });
+            res.send({
+              token: tokenForUser(user),
+              id: response.id,
+              name: response.name,
+              username: response.username,
+            });
           })
           .catch((err) => {
             if (err) {
-              console.log(err)
               res.sendStatus(500);
             }
           });
