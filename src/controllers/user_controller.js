@@ -22,7 +22,7 @@ export const getUsers = (req, res) => {
           if (err1) res.status(500).json({ err })
           // creating a list of all users that start with searchTerm
           const foundUsers = users.filter((user) => {
-            return user.username.substring(0, searchTerm.length) === searchTerm
+            return user.username.substring(0, searchTerm.length) === searchTerm && user._id.toString() !== userId.toString()
           })
           res.json(foundUsers.map((item) => {
             const friendIds = masterUser.friends.map((friendId) => { return friendId.toString() })
