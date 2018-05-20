@@ -7,7 +7,7 @@ export const createFriend = (req, res) => {
   // finding the main user
   User.findById(userId)
     .exec((err, user) => {
-      if (err) res.status(500).json({ err })
+      if (err) res.status(500).json({ err });
       // searching for user in database
       User.findOne({ username: friendUsername })
         .exec((err1, friend) => {
@@ -16,9 +16,15 @@ export const createFriend = (req, res) => {
           if (!friendIds.includes(friend.id.toString())) {
             user.friends.push(friend.id)
             user.save().then((result) => {
-              res.send(result)
+              res.send({
+                id: friend._id,
+                isFriend: true,
+                name: friend.name,
+                username: friend.username,
+                key: friend._id,
+              })
             }).catch((error) => {
-              res.status(500).json({ err })
+              res.status(500).json({ error })
             })
           }
         })
@@ -36,7 +42,14 @@ export const getFriends = (req, res) => {
       })
 
       Promise.all(friendPromises).then((values) => {
-        res.send(values.map((item) => { return { id: item._id, name: item.name, username: item.username } }))
+        res.send(values.map((item) => {
+          return {
+            id: item._id,
+            name: item.name,
+            username: item.username,
+            key: item._id,
+          }
+        }))
       })
     })
 }
@@ -51,15 +64,20 @@ export const deleteFriend = (req, res) => {
         .exec((err1, friend) => {
           user.set({ friends: user.friends.filter((item) => { return item.toString() !== friend.id.toString() }) })
           friend.set({ friends: friend.friends.filter((item) => { return item.toString() !== user.id.toString() }) })
-          const saveUsers = [user, friend]
-          const saveUsersPromises = saveUsers.map((item) => {
-            return item.save()
-          })
-
-          Promise.all(saveUsersPromises).then((values) => {
-            res.send(values)
-          }).catch((error) => {
-            res.status(500).json({ error })
+          user.save().then((result) => {
+            friend.save().then((friendResult) => {
+              res.send({
+                id: friendResult._id,
+                isFriend: false,
+                name: friendResult.name,
+                username: friendResult.username,
+                key: friendResult._id,
+              })
+            }).catch((err3) => {
+              res.status(500).json({ err3 })
+            })
+          }).catch((err2) => {
+            res.status(500).json({ err2 })
           })
         })
     })
