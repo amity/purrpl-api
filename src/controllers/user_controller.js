@@ -56,10 +56,7 @@ export const signup = (req, res, next) => {
   User.findOne({ username })
     .then((data) => {
       if (data == null) {
-        const user = new User();
-        user.name = name;
-        user.username = username;
-        user.password = password;
+        const user = { name, username, password };
         user.save()
           .then((response) => {
             res.send({
