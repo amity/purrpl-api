@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
+import getWeather from './controllers/weather_controller';
 import { requireSignin } from './services/passport';
 
 const router = Router()
@@ -13,6 +14,12 @@ router.get('/', (req, res) => {
 
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
+
+router.route('/weather/:lat&:long')
+  .get((req, res) => {
+    // get user's local temperature
+    getWeather(req, res)
+  })
 
 router.route('/friends/:id')
   .get((req, res) => {
