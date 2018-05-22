@@ -82,7 +82,7 @@ router.route('/progress/:id')
 router.route('/progress/feeling/:id')
   .get((req, res) => {
     // gets all feeling today information
-    res.send({ message: 'here is how you have been feeling' })
+    Progress.getFeelingToday(req, res)
   })
   .post((req, res) => {
     // adds a new feeling today value

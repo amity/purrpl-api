@@ -35,12 +35,36 @@ export const getProgress = (req, res) => {
 }
 
 export const addFeelingToday = (req, res) => {
-  Progress.findById(req.params.id)
-    .then((progress) => {
-      progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
-      progress.save().then((result) => {
-        res.json(result)
-      })
+  User.findById(req.params.id)
+    .then((user) => {
+      Progress.findById(user.progress)
+        .then((progress) => {
+          progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
+          progress.save().then((result) => {
+            res.json(result)
+          })
+        }).catch((error) => {
+          res.status(500).send(error)
+        })
+    }).catch((error) => {
+      res.status(500).send(error)
+    })
+}
+
+export const getFeelingToday = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      Progress.findById(user.progress)
+        .then((progress) => {
+          const dailyFeelings = progress.feelingToday.map((today) => {
+            return today.value
+          })
+          res.json({ feelingToday: dailyFeelings })
+        }).catch((error) => {
+          res.status(500).send(error)
+        })
+    }).catch((error) => {
+      res.status(500).send(error)
     })
 }
 
