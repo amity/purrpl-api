@@ -74,12 +74,20 @@ router.route('/progress/:id')
   })
 
 router.route('/progress/feeling/:id')
+  .get((req, res) => {
+    // gets all feeling today information
+    res.send({ message: 'here is how you have been feeling' })
+  })
   .post((req, res) => {
     // adds a new feeling today value
     res.send({ message: 'how are you feeling?' })
   })
 
 router.route('/progress/completion/:id')
+  .get((req, res) => {
+    // gets all completion information
+    res.send({ message: 'here is how you have been completing your reminders' })
+  })
   .post((req, res) => {
     // adds a new completion object
     res.send({ message: 'have you completed all your reminders?' })
