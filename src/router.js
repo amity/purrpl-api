@@ -58,6 +58,12 @@ router.route('/user/:id')
     res.send({ message: 'update the user' })
   })
 
+router.route('/randomUser')
+  .get((req, res) => {
+    // get random user object
+    UserController.randomUser(req, res)
+  })
+
 router.route('/reminders')
   .post(Reminders.createReminder) // create reminder, pass in info
   .get(Reminders.getReminders); // get all of user's reminders, pass in user

@@ -42,6 +42,18 @@ export const getUsers = (req, res) => {
     })
 }
 
+export const randomUser = (req, res) => {
+  User.findOne({})
+    .exec((err, user) => {
+      if (err) res.status(500).json({ err })
+      res.json({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+      })
+    })
+}
+
 export const signin = (req, res, next) => {
   res.send({ token: tokenForUser(req.user) })
 }
