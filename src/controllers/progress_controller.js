@@ -1,3 +1,4 @@
+import User from './../models/user_model'
 import Progress from './../models/progress_model'
 
 export const newProgress = (req, res) => {
@@ -21,13 +22,45 @@ export const newProgress = (req, res) => {
     })
 }
 
-export const updateProgress = (req, res) => {
-  Progress.findById(req.body.id)
+export const getProgress = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      Progress.findById(user.progress)
+        .then((progress) => {
+          res.send(progress)
+        }).catch((error) => {
+          res.status(500).json(error)
+        })
+    })
+}
+
+export const addFeelingToday = (req, res) => {
+  Progress.findById(req.params.id)
     .then((progress) => {
-      progress.set({ feelingToday: req.body.frequency })
-      progress.set({ reminderCompletion: req.body.reminderCompletion })
+      progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
       progress.save().then((result) => {
-        res.json({ message: 'progress updated' })
+        res.json(result)
+      })
+    })
+}
+
+export const addDailyCompletion = (req, res) => {
+  Progress.findById(req.params.id)
+    .then((progress) => {
+      progress.set({ dailyReminderCompletion: [...progress.dailyReminderCompletion, req.body.dailyReminderCompletion] })
+      progress.save().then((result) => {
+        res.json(result)
+      })
+    })
+}
+
+export const updateProgress = (req, res) => {
+  Progress.findById(req.params.id)
+    .then((progress) => {
+      progress.set({ feelingToday: req.body.feelingToday })
+      progress.set({ dailyReminderCompletion: req.body.dailyReminderCompletion })
+      progress.save().then((result) => {
+        res.json(result)
       })
     })
     .catch((err) => {

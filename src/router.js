@@ -1,8 +1,9 @@
 import { Router } from 'express'
 import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
-import getWeather from './controllers/weather_controller';
 import * as Friends from './controllers/friends_controller';
+import * as Progress from './controllers/progress_controller';
+import getWeather from './controllers/weather_controller';
 import { requireSignin } from './services/passport';
 
 const router = Router()
@@ -68,11 +69,20 @@ router.route('/reminders/:id')
 router.route('/progress/:id')
   .get((req, res) => {
     // get user's progress
-    res.send({ message: 'get user\'s progress' })
+    // res.send({ message: 'get user\'s progress' })
+    Progress.getProgress(req, res)
   })
-  .put((req, res) => {
-    // update user's progress
-    res.send({ message: 'update user\'s progress' })
+
+router.route('/progress/feeling/:id')
+  .post((req, res) => {
+    // adds a new feeling today value
+    res.send({ message: 'how are you feeling?' })
+  })
+
+router.route('/progress/completion/:id')
+  .post((req, res) => {
+    // adds a new completion object
+    res.send({ message: 'have you completed all your reminders?' })
   })
 
 export default router

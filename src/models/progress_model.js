@@ -2,8 +2,19 @@ import mongoose, { Schema } from 'mongoose'
 
 const ProgressSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
-  feelingToday: [{ type: Object }], // Should contain { Date, Int }
-  // reminderCompletion: { type: Reminder }
+  feelingToday: [
+    {
+      timestamp: Date,
+      value: Number,
+    },
+  ], // Contains { Date, Int }
+  dailyReminderCompletion: [
+    {
+      timestamp: Date,
+      completed: Boolean,
+      completionCount: Number,
+    },
+  ], // Contains { Date, Boolean, Int}
 })
 
 ProgressSchema.set('toJSON', {
