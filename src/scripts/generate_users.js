@@ -1,7 +1,7 @@
+import mongoose from 'mongoose'
 import User from './../models/user_model'
 import Progress from './../models/progress_model'
 import Reminder from './../models/reminder_model'
-import mongoose from 'mongoose'
 
 const mongoDB = 'mongodb://localhost/blackmirror'
 mongoose.connect(mongoDB)
