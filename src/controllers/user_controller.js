@@ -23,7 +23,10 @@ export const signup = (req, res, next) => {
   User.findOne({ username })
     .then((data) => {
       if (data == null) {
-        const user = { name, username, password };
+        const user = new User();
+        user.name = name
+        user.username = username
+        user.password = password
         user.save()
           .then((response) => {
             res.send({ token: tokenForUser(user) });
