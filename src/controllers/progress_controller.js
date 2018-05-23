@@ -51,15 +51,37 @@ export const addFeelingToday = (req, res) => {
     })
 }
 
+const generateMessage = (value) => {
+  switch (value) {
+    case 0:
+      return 'You didn\'t have a good week :('
+    case 1:
+      return 'You had a pretty rough week'
+    case 2:
+      return 'This week was sort of tough'
+    case 3:
+      return 'There were definitely some ups and downs'
+    case 4:
+      return 'Nice, you had a pretty solid week!'
+    case 5:
+      return 'Wow, this was a great week for you!'
+    default:
+      return 'There\'s not enough data to chart!'
+  }
+}
+
 export const getFeelingToday = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       Progress.findById(user.progress)
         .then((progress) => {
+          let averageValue = 0
           const dailyFeelings = progress.feelingToday.map((today) => {
+            averageValue += today.value
             return today.value
           })
-          res.json({ feelingToday: dailyFeelings })
+          averageValue = dailyFeelings.length >= 7 ? Math.round(averageValue / dailyFeelings.length) : -1
+          res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue) })
         }).catch((error) => {
           res.status(500).send(error)
         })
