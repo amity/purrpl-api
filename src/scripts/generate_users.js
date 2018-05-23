@@ -8,6 +8,12 @@ const mongoDB = 'mongodb://localhost/blackmirror'
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
 
+/* NOTE
+ * To run this script:
+ * babel-node generate_users.js
+ * Pay attention to the console after the script is done
+ */
+
 const users = [
   {
     name: 'Testing1',
