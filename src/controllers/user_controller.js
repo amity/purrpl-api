@@ -55,7 +55,12 @@ export const randomUser = (req, res) => {
 }
 
 export const signin = (req, res, next) => {
-  res.send({ token: tokenForUser(req.user) })
+  res.send({
+    token: tokenForUser(req.user),
+    name: req.user.name,
+    username: req.user.username,
+    id: req.user._id,
+  })
 }
 
 export const signup = (req, res, next) => {
