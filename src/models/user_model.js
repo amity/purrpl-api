@@ -12,7 +12,7 @@ const UserSchema = new Schema({
   }],
   plant: { type: Number },
   friends: [{ type: Schema.Types.ObjectId, ref: 'Friends' }],
-  // overallProgress: { type: Progress },
+  progress: { type: Schema.Types.ObjectId, res: 'Progress' },
   reminders: [{ type: Schema.Types.ObjectId, ref: 'Reminder' }],
   receivedAction: { type: Boolean },
 })
