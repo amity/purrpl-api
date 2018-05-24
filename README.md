@@ -53,3 +53,4 @@ prod: yarn build; node src/server.js
 
 ## Acknowledgments 🤓
 Thanks to Tim!!!!!!!!!!!!!!
+Thanks to OpenWeatherMap API for location - weather incorporation.
