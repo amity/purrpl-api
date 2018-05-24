@@ -5,9 +5,14 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
-  // users: [{ type: User }],
+  notifications: [{
+    senderId: Schema.Types.ObjectId,
+    action: String,
+    time: Date,
+  }],
   plant: { type: Number },
-  // overallProgress: { type: Progress },
+  friends: [{ type: Schema.Types.ObjectId, ref: 'Friends' }],
+  progress: { type: Schema.Types.ObjectId, res: 'Progress' },
   reminders: [{ type: Schema.Types.ObjectId, ref: 'Reminder' }],
   receivedAction: { type: Boolean },
 })
