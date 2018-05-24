@@ -74,7 +74,7 @@ export const signup = (req, res, next) => {
         const user = new User({ name, username, password })
         new Progress({ userId: user._id }).save().then((savedProgress) => {
           user.progress = savedProgress._id
-          const reminders = ['water', 'sunscreen', 'food', 'meds', 'sleep']
+          const reminders = ['water', 'sunscreen', 'food', 'medicine', 'sleep']
           const remindersPromises = reminders.map((reminder) => {
             return new Reminder({ userId: user._id, type: reminder }).save()
           })
