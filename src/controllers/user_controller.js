@@ -1,6 +1,9 @@
 import jwt from 'jwt-simple'
 import dotenv from 'dotenv'
 import User from './../models/user_model'
+import Reminder from './../models/reminder_model'
+import Progress from './../models/progress_model'
+
 
 dotenv.config({ silent: true })
 
@@ -73,24 +76,26 @@ export const signup = (req, res, next) => {
   User.findOne({ username })
     .then((data) => {
       if (data == null) {
-        const user = new User();
-        user.name = name
-        user.username = username
-        user.password = password
-        user.save()
-          .then((response) => {
-            res.send({
-              token: tokenForUser(user),
-              id: response.id,
-              name: response.name,
-              username: response.username,
-            });
+        const user = new User({ name, username, password })
+        new Progress({ userId: user._id }).save().then((savedProgress) => {
+          user.progress = savedProgress._id
+          const reminders = ['water', 'sunscreen', 'food', 'medicine', 'sleep']
+          const remindersPromises = reminders.map((reminder) => {
+            return new Reminder({ userId: user._id, type: reminder }).save()
           })
-          .catch((err) => {
-            if (err) {
-              res.sendStatus(500);
-            }
-          });
+          Promise.all(remindersPromises).then((results) => {
+            user.reminders = results.map((item) => { return item._id })
+            user.save()
+              .then((response) => {
+                res.send({
+                  token: tokenForUser(user),
+                  id: response.id,
+                  name: response.name,
+                  username: response.username,
+                })
+              })
+          })
+        })
       } else {
         res.status(422).send('User already exists');
       }
