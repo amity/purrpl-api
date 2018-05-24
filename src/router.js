@@ -64,13 +64,21 @@ router.route('/randomUser')
     UserController.randomUser(req, res)
   })
 
-router.route('/reminders')
-  .post(Reminders.createReminder) // create reminder, pass in info
-  .get(Reminders.getReminders); // get all of user's reminders, pass in user
-
 router.route('/reminders/:id')
-  .get(Reminders.getReminder) // get a single reminder using id
-  .put(Reminders.updateReminder) // update a single reminder using id and fields
+  .get((req, res) => {
+    // gets all user reminders
+    res.send({ message: 'all user\'s reminders' })
+  })
+  // .post(Reminders.createReminder) // create reminder, pass in info
+  // .get(Reminders.getReminders); // get all of user's reminders, pass in user
+
+router.route('/reminders/:id&:type')
+  .get((req, res) => {
+    // gets a specific user reminder
+    res.send({ message: 'specific user reminder' })
+  })
+  // .get(Reminders.getReminder) // get a single reminder using id
+  // .put(Reminders.updateReminder) // update a single reminder using id and fields
 
 router.route('/progress/:id')
   .get((req, res) => {
