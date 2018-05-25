@@ -46,7 +46,16 @@ export const getReminder = (req, res) => {
           res.status(500).json(error)
         })
     })
-};
+}
+
+export const dailyReminders = (req, res) => {
+  Reminder.find({ userId: req.params.id, 'times.0': { $exists: true } })
+    .then((reminders) => {
+      res.send(reminders)
+    }).catch((error) => {
+      res.status(500).json(error)
+    })
+}
 
 export const updateActive = (req, res) => {
   Reminder.findById(req.params.id)

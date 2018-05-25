@@ -69,16 +69,17 @@ router.route('/reminder/:id&:type')
     // gets a specific user reminder
     Reminders.getReminder(req, res)
   })
-  // .get(Reminders.getReminder) // get a single reminder using id
-  // .put(Reminders.updateReminder) // update a single reminder using id and fields
 
 router.route('/reminders/:id')
   .get((req, res) => {
     // gets all user reminders
     res.send({ message: 'all user\'s reminders' })
   })
-  // .post(Reminders.createReminder) // create reminder, pass in info
-  // .get(Reminders.getReminders); // get all of user's reminders, pass in user
+
+router.route('/reminders/daily/:id')
+  .get((req, res) => {
+    Reminders.dailyReminders(req, res)
+  })
 router.route('/reminders/active/:id')
   .put((req, res) => {
     Reminders.updateActive(req, res)
@@ -92,7 +93,6 @@ router.route('/reminders/times/:id')
 router.route('/progress/:id')
   .get((req, res) => {
     // get user's progress
-    // res.send({ message: 'get user\'s progress' })
     Progress.getProgress(req, res)
   })
 
