@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose'
 const ReminderSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', require: true },
   type: { type: String, required: true },
-  times: [{ type: Date }],
+  times: [{ label: String, value: Number }],
   active: { type: Boolean, default: false },
   completion: [{
     id: Schema.Types.ObjectId,
