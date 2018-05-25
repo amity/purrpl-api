@@ -33,7 +33,7 @@ export const getReminders = (req, res) => {
 export const getReminder = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      Reminder.findOne({ _id: user._id, type: req.params.type })
+      Reminder.findOne({ userId: user._id, type: req.params.type })
         .then((reminder) => {
           res.send({
             id: reminder._id,

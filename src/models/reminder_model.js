@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
 const ReminderSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User', require: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'User', require: true },
   type: { type: String, required: true },
   times: [{ type: Date }],
   active: { type: Boolean, default: false },
