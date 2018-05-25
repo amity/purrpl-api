@@ -48,10 +48,45 @@ export const getReminder = (req, res) => {
     })
 }
 
+const generateMessage = (type) => {
+  switch (type) {
+    case 'water':
+      return 'Drink some water'
+    case 'sunscreen':
+      return 'Apply sunscreen'
+    case 'food':
+      return 'Eat some food'
+    case 'medicine':
+      return 'Take your medication'
+    case 'sleep':
+      return 'Get some rest'
+    default:
+      return ''
+  }
+}
+
 export const dailyReminders = (req, res) => {
   Reminder.find({ userId: req.params.id, 'times.0': { $exists: true } })
     .then((reminders) => {
-      res.send(reminders)
+      const individualReminders = []
+      reminders.forEach((reminder) => {
+        reminder.times.forEach((time) => {
+          individualReminders.push({
+            id: reminder._id,
+            type: reminder.type,
+            time,
+            message: generateMessage(reminder.type),
+          })
+        })
+      })
+      const sortedIndividualReminders = individualReminders.sort((a, b) => {
+        if (a.time.value < b.time.value) {
+          return -1
+        } else {
+          return 1
+        }
+      })
+      res.send(sortedIndividualReminders)
     }).catch((error) => {
       res.status(500).json(error)
     })
