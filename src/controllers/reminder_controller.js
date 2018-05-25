@@ -66,7 +66,7 @@ const generateMessage = (type) => {
 }
 
 export const dailyReminders = (req, res) => {
-  Reminder.find({ userId: req.params.id, 'times.0': { $exists: true } })
+  Reminder.find({ userId: req.params.id, 'times.0': { $exists: true }, active: { $eq: true } })
     .then((reminders) => {
       const individualReminders = []
       reminders.forEach((reminder) => {
