@@ -1,12 +1,15 @@
 import mongoose, { Schema } from 'mongoose'
 
 const ReminderSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
-  type: { type: String },
-  frequency: { type: Number },
-  times: [{ type: Object }], // dictionary? time : done
-  toggle: { type: Boolean },
-  // completion: [{ type: Boolean }], // Should contain { Date, Int }
+  user: { type: Schema.Types.ObjectId, ref: 'User', require: true },
+  type: { type: String, required: true },
+  times: [{ type: Date }],
+  active: { type: Boolean, default: false },
+  completion: [{
+    id: Schema.Types.ObjectId,
+    timestamp: Date,
+    completed: Boolean,
+  }],
 })
 
 ReminderSchema.set('toJSON', {

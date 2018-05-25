@@ -75,7 +75,7 @@ router.route('/reminders/:id')
 router.route('/reminders/:id&:type')
   .get((req, res) => {
     // gets a specific user reminder
-    res.send({ message: 'specific user reminder' })
+    Reminders.getReminder(req, res)
   })
   // .get(Reminders.getReminder) // get a single reminder using id
   // .put(Reminders.updateReminder) // update a single reminder using id and fields

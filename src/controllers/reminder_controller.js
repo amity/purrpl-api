@@ -1,3 +1,4 @@
+import User from './../models/user_model'
 import Reminder from './../models/reminder_model'
 
 export const createReminder = (req, res) => {
@@ -30,13 +31,21 @@ export const getReminders = (req, res) => {
 
 // get a single reminder by id
 export const getReminder = (req, res) => {
-  Reminder.findById(req.params.id)
-    .then((rem) => {
-      res.send(rem);
+  User.findById(req.params.id)
+    .then((user) => {
+      Reminder.findOne({ _id: user._id, type: req.params.type })
+        .then((reminder) => {
+          res.send({
+            id: reminder._id,
+            type: reminder.type,
+            times: reminder.times,
+            active: reminder.active,
+          })
+        })
+        .catch((error) => {
+          res.status(500).json(error)
+        })
     })
-    .catch((error) => {
-      res.status(500).json({ error });
-    });
 };
 
 // update single reminder by id
