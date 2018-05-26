@@ -53,6 +53,8 @@ export const randomUser = (req, res) => {
         id: user._id,
         name: user.name,
         username: user.username,
+        notifications: user.notifications,
+        visible: user.visible,
       })
     })
 }
@@ -63,6 +65,8 @@ export const signin = (req, res, next) => {
     name: req.user.name,
     username: req.user.username,
     id: req.user._id,
+    notifications: req.user.notifications,
+    visible: req.user.visible,
   })
 }
 
@@ -92,6 +96,8 @@ export const signup = (req, res, next) => {
                   id: response.id,
                   name: response.name,
                   username: response.username,
+                  notifications: response.notifications,
+                  visible: response.visible,
                 })
               })
           })
@@ -101,11 +107,46 @@ export const signup = (req, res, next) => {
       }
     })
     .catch((err) => {
-      console.log(err)
       res.sendStatus(500);
     });
 
   return next;
+}
+
+export const toggleNotifications = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.notifications.active = req.body.active
+      user.save().then((response) => {
+        res.send({
+          id: response.id,
+          name: response.name,
+          username: response.username,
+          notifications: response.notifications,
+          visible: response.visible,
+        })
+      }).catch((error) => {
+        res.status(500).json(error)
+      })
+    })
+}
+
+export const updateVisibility = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.visible = req.body.type
+      user.save().then((response) => {
+        res.send({
+          id: response.id,
+          name: response.name,
+          username: response.username,
+          notifications: response.notifications,
+          visible: response.visible,
+        })
+      }).catch((error) => {
+        res.status(500).json(error)
+      })
+    })
 }
 
 // update with friends' avatar?
