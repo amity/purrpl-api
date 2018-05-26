@@ -70,18 +70,52 @@ router.route('/randomUser')
     UserController.randomUser(req, res)
   })
 
-router.route('/reminders')
-  .post(Reminders.createReminder) // create reminder, pass in info
-  .get(Reminders.getReminders); // get all of user's reminders, pass in user
+router.route('/reminder/:id&:type')
+  .get((req, res) => {
+    // gets a specific user reminder
+    Reminders.getReminder(req, res)
+  })
+
+router.route('/reminder/date/:id&:type&:date&:hour')
+  .get((req, res) => {
+    // get a specific time of a reminder
+    Reminders.getDateReminder(req, res)
+  })
+
+router.route('/reminder/completion/:id')
+  .put((req, res) => {
+    // toggle a specific time of a reminder
+    Reminders.toggleCompletion(req, res)
+  })
 
 router.route('/reminders/:id')
-  .get(Reminders.getReminder) // get a single reminder using id
-  .put(Reminders.updateReminder) // update a single reminder using id and fields
+  .get((req, res) => {
+    // gets all user reminders
+    res.send({ message: 'all user\'s reminders' })
+  })
+
+router.route('/reminders/daily/:id')
+  .get((req, res) => {
+    Reminders.dailyReminders(req, res)
+  })
+router.route('/reminders/active/:id')
+  .put((req, res) => {
+    Reminders.updateActive(req, res)
+  })
+
+router.route('/reminders/times/:id')
+  .put((req, res) => {
+    Reminders.updateTimes(req, res)
+  })
+
+router.route('/reminders/remainders/:id&:date')
+  .get((req, res) => {
+    Reminders.fetchDailyRemainder(req, res)
+  })
 
 router.route('/progress/:id')
   .get((req, res) => {
     // get user's progress
-    // res.send({ message: 'get user\'s progress' })
     Progress.getProgress(req, res)
   })
 
