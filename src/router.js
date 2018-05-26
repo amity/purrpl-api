@@ -20,7 +20,7 @@ router.post('/signup', UserController.signup);
 router.route('/notifcations/:id')
   .get((req, res) => {
     // get the user's notifications
-    .get(UserController.fetchNotifications(req, res))
+    UserController.fetchNotifications(req, res))
   }
 
 router.route('/weather/:lat&:long')
