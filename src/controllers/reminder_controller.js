@@ -71,12 +71,13 @@ export const dailyReminders = (req, res) => {
       const individualReminders = []
       reminders.forEach((reminder) => {
         reminder.times.forEach((time) => {
+          const message = generateMessage(reminder.type)
           individualReminders.push({
             id: reminder._id,
-            key: `${time.value}${time.label}`,
+            key: `${time.value}${time.label}${message}`,
             type: reminder.type,
             time,
-            message: generateMessage(reminder.type),
+            message,
           })
         })
       })

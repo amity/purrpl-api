@@ -127,7 +127,7 @@ const createUsersPromises = users.map((user) => {
   new Progress({ userId: newUser._id, feelingToday: user.feelingToday }).save().then((savedProgress) => {
     newUser.progress = savedProgress._id
     const reminderPromises = ['water', 'sunscreen', 'food', 'medicine', 'sleep'].map((item) => {
-      return new Reminder({ userId: newUser._id, type: item, completion: {}}).save()
+      return new Reminder({ userId: newUser._id, type: item, completion: {} }).save()
     })
     Promise.all(reminderPromises).then((results) => {
       newUser.reminders = results.map((item) => { return item._id })
