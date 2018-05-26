@@ -119,15 +119,11 @@ export const toggleCompletion = (req, res) => {
   let foundHour = false
   Reminder.findById(req.params.id)
     .then((reminder) => {
-      console.log(reminder.completion[0].completed)
-      console.log(req.body)
       reminder.completion.forEach((item) => {
         if (item.date === req.body.date) {
           foundDate = true
           item.completed.forEach((completedHour) => {
-            console.log(completedHour.hour, req.body.hour)
             if (completedHour.hour === req.body.hour) {
-              console.log('hello')
               foundHour = true
               completedHour.completion = req.body.completion
             }
