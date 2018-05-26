@@ -53,6 +53,8 @@ export const randomUser = (req, res) => {
         id: user._id,
         name: user.name,
         username: user.username,
+        notifications: user.notifications,
+        visible: user.visible,
       })
     })
 }
@@ -64,6 +66,7 @@ export const signin = (req, res, next) => {
     username: req.user.username,
     id: req.user._id,
     notifications: req.user.notifications,
+    visible: req.user.visible,
   })
 }
 
@@ -94,6 +97,7 @@ export const signup = (req, res, next) => {
                   name: response.name,
                   username: response.username,
                   notifications: response.notifications,
+                  visible: response.visible,
                 })
               })
           })
@@ -119,6 +123,25 @@ export const toggleNotifications = (req, res) => {
           name: response.name,
           username: response.username,
           notifications: response.notifications,
+          visible: response.visible,
+        })
+      }).catch((error) => {
+        res.status(500).json(error)
+      })
+    })
+}
+
+export const updateVisibility = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.visible = req.body.type
+      user.save().then((response) => {
+        res.send({
+          id: response.id,
+          name: response.name,
+          username: response.username,
+          notifications: response.notifications,
+          visible: response.visible,
         })
       }).catch((error) => {
         res.status(500).json(error)

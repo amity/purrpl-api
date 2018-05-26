@@ -64,6 +64,11 @@ router.route('/user/notifications/:id')
     UserController.toggleNotifications(req, res)
   })
 
+router.route('/user/visible/:id')
+  .put((req, res) => {
+    // update the user's visibility
+    UserController.updateVisibility(req, res)
+  })
 router.route('/randomUser')
   .get((req, res) => {
     // get random user object
