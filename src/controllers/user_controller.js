@@ -148,3 +148,26 @@ export const updateVisibility = (req, res) => {
       })
     })
 }
+
+// update with friends' avatar?
+// sort by date?
+const fix = (notifications) => {
+  return notifications.map((notification) => {
+    return {
+      _id: notification._id,
+      name: notification.senderId.name,
+      username: notification.senderId.username,
+      action: notification.action,
+      time: notification.time,
+    };
+  });
+};
+
+export const fetchNotifications = (req, res) => {
+  User.findById(req.params.id)
+    .populate('notifications.senderId')
+    .exec((err, user) => {
+      if (err) res.status(500).json({ err })
+      res.send(fix(user.notifications))
+    })
+}

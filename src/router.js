@@ -17,6 +17,12 @@ router.get('/', (req, res) => {
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
 
+router.route('/notifcations/:id')
+  .get((req, res) => {
+    // get the user's notifications
+    UserController.fetchNotifications(req, res)
+  })
+
 router.route('/weather/:lat&:long')
   .get((req, res) => {
     // get user's local temperature
