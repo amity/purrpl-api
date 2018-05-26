@@ -70,8 +70,15 @@ router.route('/reminder/:id&:type')
     Reminders.getReminder(req, res)
   })
 
+router.route('/reminder/date/:id&:type&:date&:hour')
+  .get((req, res) => {
+    // get a specific time of a reminder
+    Reminders.getDateReminder(req, res)
+  })
+
 router.route('/reminder/completion/:id')
   .put((req, res) => {
+    // toggle a specific time of a reminder
     Reminders.toggleCompletion(req, res)
   })
 

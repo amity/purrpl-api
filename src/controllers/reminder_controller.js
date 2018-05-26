@@ -145,3 +145,22 @@ export const toggleCompletion = (req, res) => {
       })
     })
 }
+
+export const getDateReminder = (req, res) => {
+  Reminder.findOne({ userId: req.params.id, type: req.params.type })
+    .then((reminder) => {
+      let dateAndTimeReminder = {}
+      reminder.completion.forEach((item) => {
+        if (item.date === req.params.date) {
+          item.completed.forEach((completedHour) => {
+            if (completedHour.hour.toString() === req.params.hour) {
+              dateAndTimeReminder = completedHour
+            }
+          })
+        }
+      })
+      res.send(dateAndTimeReminder)
+    }).catch((error) => {
+      res.status(500).json(error)
+    })
+}
