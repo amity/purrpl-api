@@ -110,19 +110,19 @@ export const signup = (req, res, next) => {
 
 // update with friends' avatar?
 // sort by date?
-const fix = (notifs) => {
-  return notifs.map((notif) => {
+const fix = (notifications) => {
+  return notifications.map((notification) => {
     return {
-      _id: notif._id,
-      name: notif.senderId.name,
-      username: notif.senderId.username,
-      action: notif.action,
-      time: notif.time,
+      _id: notification._id,
+      name: notification.senderId.name,
+      username: notification.senderId.username,
+      action: notification.action,
+      time: notification.time,
     };
   });
 };
 
-export const getNotifs = (req, res) => {
+export const fetchNotifications = (req, res) => {
   User.findById(req.params.id)
     .populate('notifications.senderId')
     .exec((err, user) => {
