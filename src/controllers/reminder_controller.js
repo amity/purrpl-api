@@ -177,3 +177,26 @@ export const getDateReminder = (req, res) => {
       res.status(500).json(error)
     })
 }
+
+export const fetchDailyRemainder = (req, res) => {
+  Reminder.find({ userId: req.params.id })
+    .then((reminders) => {
+      let completedReminders = 0
+      let totalReminders = 0
+      reminders.forEach((reminder) => {
+        totalReminders += reminder.times.length
+        reminder.completion.forEach((completionObject) => {
+          if (completionObject.date === req.params.date) {
+            completionObject.completed.forEach((item) => {
+              if (item.completion) {
+                completedReminders += 1
+              }
+            })
+          }
+        })
+      })
+      res.send({ numerator: completedReminders, denominator: totalReminders })
+    }).catch((error) => {
+      res.status(500).json(error)
+    })
+}

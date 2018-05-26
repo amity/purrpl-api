@@ -102,6 +102,11 @@ router.route('/reminders/times/:id')
     Reminders.updateTimes(req, res)
   })
 
+router.route('/reminders/remainders/:id&:date')
+  .get((req, res) => {
+    Reminders.fetchDailyRemainder(req, res)
+  })
+
 router.route('/progress/:id')
   .get((req, res) => {
     // get user's progress
