@@ -73,7 +73,7 @@ export const dailyReminders = (req, res) => {
         reminder.times.forEach((time) => {
           individualReminders.push({
             id: reminder._id,
-            key: reminder._id,
+            key: `${time.value}${time.label}`,
             type: reminder.type,
             time,
             message: generateMessage(reminder.type),
@@ -159,6 +159,19 @@ export const getDateReminder = (req, res) => {
           })
         }
       })
+      if (dateAndTimeReminder.hour === undefined) {
+        let foundDate = false
+        dateAndTimeReminder = { hour: req.params.hour, completion: false }
+        reminder.completion.forEach((item) => {
+          if (item.date) {
+            foundDate = true
+            item.completed.push(dateAndTimeReminder)
+          }
+        })
+        if (!foundDate) {
+          reminder.completion.push({ date: req.params.date, completion: [dateAndTimeReminder] })
+        }
+      }
       res.send(dateAndTimeReminder)
     }).catch((error) => {
       res.status(500).json(error)
