@@ -114,6 +114,45 @@ export const updateTimes = (req, res) => {
     })
 }
 
+export const toggleCompletion = (req, res) => {
+  let foundDate = false
+  let foundHour = false
+  Reminder.findById(req.params.id)
+    .then((reminder) => {
+      console.log(reminder)
+      console.log(req.body)
+      reminder.completion.forEach((item) => {
+        if (item.date === req.body.date) {
+          foundDate = true
+          item.completed.forEach((completedHour) => {
+            if (completedHour.hour.toString() === req.body.hour) {
+              foundHour = true
+              completedHour.completion = req.body.completion
+            }
+          })
+          if (!foundHour) {
+            item.completed.push({ hour: req.body.hour, completed: req.body.completion })
+          }
+        }
+      })
+      if (!foundDate) {
+        reminder.completion.push({ date: req.body.date, completed: [{ hour: req.body.hour, completion: req.body.completion }] })
+      }
+      reminder.save().then((result) => {
+        res.send(result)
+      }).catch((error) => {
+        res.status(500).json(error)
+      })
+      // console.log(reminder)
+      // reminder.completion[req.body.day][req.body.hour] = req.body.completion
+      // reminder.save().then((result) => {
+      //   res.send(result)
+      // }).catch((error) => {
+      //   res.status(500).json(error)
+      // })
+    })
+}
+
 //
 // // pass in time, reflect dictionary?
 // export const toggleCompletion = (req, res) => {

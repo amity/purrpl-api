@@ -1,15 +1,12 @@
 import mongoose, { Schema } from 'mongoose'
+import moment from 'moment'
 
 const ReminderSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', require: true },
   type: { type: String, required: true },
   times: [{ label: String, value: Number }],
   active: { type: Boolean, default: false },
-  completion: [{
-    id: Schema.Types.ObjectId,
-    timestamp: Date,
-    completed: Boolean,
-  }],
+  completion: [{ date: { type: String, default: moment().format('MMM D, YYYY') }, completed: [{ hour: Number, completion: Boolean }] }], // dictionary format : { date: { hour, completion } }
 })
 
 ReminderSchema.set('toJSON', {

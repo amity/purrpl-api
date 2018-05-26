@@ -90,6 +90,11 @@ router.route('/reminders/times/:id')
     Reminders.updateTimes(req, res)
   })
 
+router.route('/reminders/completion/:id')
+  .put((req, res) => {
+    Reminders.toggleCompletion(req, res)
+  })
+
 router.route('/progress/:id')
   .get((req, res) => {
     // get user's progress
