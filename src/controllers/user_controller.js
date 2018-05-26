@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import User from './../models/user_model'
 import Reminder from './../models/reminder_model'
 import Progress from './../models/progress_model'
+import Avatar from '../models/avatar_model'
 
 
 dotenv.config({ silent: true })
@@ -55,6 +56,7 @@ export const randomUser = (req, res) => {
         username: user.username,
         notifications: user.notifications,
         visible: user.visible,
+        avatar: user.avatar,
       })
     })
 }
@@ -67,6 +69,7 @@ export const signin = (req, res, next) => {
     id: req.user._id,
     notifications: req.user.notifications,
     visible: req.user.visible,
+    avatar: req.user.avatar,
   })
 }
 
@@ -89,6 +92,7 @@ export const signup = (req, res, next) => {
           })
           Promise.all(remindersPromises).then((results) => {
             user.reminders = results.map((item) => { return item._id })
+            user.avatar = new Avatar({ userId: user._id })
             user.save()
               .then((response) => {
                 res.send({
@@ -98,6 +102,7 @@ export const signup = (req, res, next) => {
                   username: response.username,
                   notifications: response.notifications,
                   visible: response.visible,
+                  avatar: response.avatar,
                 })
               })
           })
@@ -124,6 +129,7 @@ export const toggleNotifications = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
@@ -142,6 +148,7 @@ export const updateVisibility = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
