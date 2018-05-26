@@ -107,3 +107,26 @@ export const signup = (req, res, next) => {
 
   return next;
 }
+
+// update with friends' avatar?
+// sort by date?
+const fix = (notifs) => {
+  return notifs.map((notif) => {
+    return {
+      _id: notif._id,
+      name: notif.senderId.name,
+      username: notif.senderId.username,
+      action: notif.action,
+      time: notif.time,
+    };
+  });
+};
+
+export const getNotifs = (req, res) => {
+  User.findById(req.params.id)
+    .populate('notifications.senderId')
+    .exec((err, user) => {
+      if (err) res.status(500).json({ err })
+      res.send(fix(user.notifications))
+    })
+}
