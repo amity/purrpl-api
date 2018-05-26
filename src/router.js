@@ -70,6 +70,11 @@ router.route('/reminder/:id&:type')
     Reminders.getReminder(req, res)
   })
 
+router.route('/reminder/completion/:id')
+  .put((req, res) => {
+    Reminders.toggleCompletion(req, res)
+  })
+
 router.route('/reminders/:id')
   .get((req, res) => {
     // gets all user reminders
@@ -88,11 +93,6 @@ router.route('/reminders/active/:id')
 router.route('/reminders/times/:id')
   .put((req, res) => {
     Reminders.updateTimes(req, res)
-  })
-
-router.route('/reminders/completion/:id')
-  .put((req, res) => {
-    Reminders.toggleCompletion(req, res)
   })
 
 router.route('/progress/:id')
