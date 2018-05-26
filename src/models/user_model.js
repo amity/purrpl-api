@@ -5,6 +5,7 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
+  visible: { type: String, default: 'Everyone' },
   notifications: {
     active: { type: Boolean, default: true },
     notifs: [{
