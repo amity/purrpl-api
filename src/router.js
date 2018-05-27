@@ -3,7 +3,7 @@ import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
 import * as Friends from './controllers/friends_controller';
 import * as Progress from './controllers/progress_controller';
-import * as Avatar from './controllers/avatar_controller'
+import fetchAvatar from './controllers/avatar_controller'
 import getWeather from './controllers/weather_controller';
 import { requireSignin } from './services/passport';
 
@@ -154,7 +154,7 @@ router.route('/progress/completion/:id')
 router.route('/avatar/:id')
   .get((req, res) => {
     // gets user's avatar object
-    Avatar.fetchAvatar(req, res)
+    fetchAvatar(req, res)
   })
 
 export default router
