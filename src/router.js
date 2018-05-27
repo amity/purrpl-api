@@ -137,16 +137,19 @@ router.route('/progress/feeling/:id')
   })
   .post((req, res) => {
     // adds a new feeling today value
+    Progress.addFeelingToday(req, res)
     res.send({ message: 'how are you feeling?' })
   })
 
 router.route('/progress/completion/:id')
   .get((req, res) => {
     // gets all completion information
+    Progress.getDailyCompletion(req, res)
     res.send({ message: 'here is how you have been completing your reminders' })
   })
   .post((req, res) => {
     // adds a new completion object
+    Progress.addDailyCompletion(req, res)
     res.send({ message: 'have you completed all your reminders?' })
   })
 
