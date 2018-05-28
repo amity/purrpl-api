@@ -39,7 +39,7 @@ export const addFeelingToday = (req, res) => {
     .then((user) => {
       Progress.findById(user.progress)
         .then((progress) => {
-          progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
+          progress.set({ feelingToday: req.body.feelingToday })
           progress.save().then((result) => {
             res.json(result)
           })
@@ -50,6 +50,19 @@ export const addFeelingToday = (req, res) => {
       res.status(500).send(error)
     })
 }
+
+export const updateFeelingToday = (req, res) => {
+  Progress.findById(req.params.id)
+    .then((progress) => {
+      progress.update({ feelingToday: req.body.feelingToday })
+      progress.save().then((result) => {
+        res.json(result)
+      }).catch((err) => {
+        res.status(500).json({ err })
+      })
+    })
+}
+
 
 const generateMessage = (value) => {
   switch (value) {
@@ -103,7 +116,7 @@ export const addDailyCompletion = (req, res) => {
 export const updateProgress = (req, res) => {
   Progress.findById(req.params.id)
     .then((progress) => {
-      progress.set({ feelingToday: req.body.feelingToday })
+      progress.udpate({ feelingToday: req.body.feelingToday })
       progress.set({ dailyReminderCompletion: req.body.dailyReminderCompletion })
       progress.save().then((result) => {
         res.json(result)
