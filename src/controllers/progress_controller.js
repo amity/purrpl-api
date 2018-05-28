@@ -39,7 +39,11 @@ export const addFeelingToday = (req, res) => {
     .then((user) => {
       Progress.findById(user.progress)
         .then((progress) => {
-          progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
+          const feelingToday = {
+            timestamp: Date.now,
+            value: req.body.rating,
+          }
+          progress.set({ feelingToday: [...progress.feelingToday, feelingToday] })
           progress.save().then((result) => {
             res.json(result)
           })

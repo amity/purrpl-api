@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as UserController from './controllers/user_controller';
+import * as User from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
 import * as Friends from './controllers/friends_controller';
 import * as Progress from './controllers/progress_controller';
@@ -14,13 +14,13 @@ router.get('/', (req, res) => {
 
 // TODO: requireAuth, add secret key .env
 
-router.post('/signin', requireSignin, UserController.signin);
-router.post('/signup', UserController.signup);
+router.post('/signin', requireSignin, User.signin);
+router.post('/signup', User.signup);
 
 router.route('/notifcations/:id')
   .get((req, res) => {
     // get the user's notifications
-    UserController.fetchNotifications(req, res)
+    User.fetchNotifications(req, res)
   })
 
 router.route('/weather/:lat&:long')
@@ -51,7 +51,7 @@ router.route('/friends/:id&:username')
 router.route('/users/:id&:search')
   .get((req, res) => {
     // get all users
-    UserController.getUsers(req, res)
+    User.getUsers(req, res)
   })
 
 router.route('/user/:id')
@@ -67,18 +67,18 @@ router.route('/user/:id')
 router.route('/user/notifications/:id')
   .put((req, res) => {
     // toggle user's notifications
-    UserController.toggleNotifications(req, res)
+    User.toggleNotifications(req, res)
   })
 
 router.route('/user/visible/:id')
   .put((req, res) => {
     // update the user's visibility
-    UserController.updateVisibility(req, res)
+    User.updateVisibility(req, res)
   })
 router.route('/randomUser')
   .get((req, res) => {
     // get random user object
-    UserController.randomUser(req, res)
+    User.randomUser(req, res)
   })
 
 router.route('/reminder/:id&:type')
