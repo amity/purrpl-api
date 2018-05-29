@@ -228,3 +228,19 @@ export const fetchNotifications = (req, res) => {
       res.status(500).json(error)
     })
 }
+
+export const deleteNotification = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      const cleanedNotifications = user.notifications.notifs.filter((item) => {
+        console.log(item._id)
+        if (item._id.toString() !== req.params.notificationId.toString()) {
+          return item
+        }
+      })
+      user.notifications.notifs = cleanedNotifications
+      user.save().then((result) => {
+        res.json({ message: 'notification has been removed' })
+      })
+    })
+}

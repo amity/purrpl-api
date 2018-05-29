@@ -70,7 +70,11 @@ router.route('/user/notifications/:id')
     // toggle user's notifications
     UserController.toggleNotifications(req, res)
   })
-
+router.route('/user/notifications/:id&:notificationId')
+  .delete((req, res) => {
+    // delete notification
+    UserController.deleteNotification(req, res)
+  })
 router.route('/user/visible/:id')
   .put((req, res) => {
     // update the user's visibility
