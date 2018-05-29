@@ -56,6 +56,7 @@ export const fetchUser = (req, res) => {
         username: user.username,
         notifications: user.notifications,
         visible: user.visible,
+        avatar: user.avatar,
       })
     })
 }
