@@ -1,36 +1,5 @@
 import User from './../models/user_model'
 
-export const createFriend = (req, res) => {
-  const userId = req.params.id
-  const friendUsername = req.body.username
-
-  // finding the main user
-  User.findById(userId)
-    .exec((err, user) => {
-      if (err) res.status(500).json({ err });
-      // searching for user in database
-      User.findOne({ username: friendUsername })
-        .exec((err1, friend) => {
-          if (err1) res.status(500).json({ err })
-          const friendIds = user.friends.map((friendId) => { return friendId.toString() })
-          if (!friendIds.includes(friend.id.toString())) {
-            user.friends.push(friend.id)
-            user.save().then((result) => {
-              res.send({
-                id: friend._id,
-                isFriend: true,
-                name: friend.name,
-                username: friend.username,
-                key: friend._id,
-              })
-            }).catch((error) => {
-              res.status(500).json({ error })
-            })
-          }
-        })
-    })
-}
-
 export const getFriends = (req, res) => {
   // finds main user
   User.findById(req.params.id)
@@ -98,5 +67,35 @@ export const sendAction = (req, res) => {
         .catch((error) => {
           res.status(500).json({ error })
         })
+    })
+}
+
+export const acceptRequest = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      User.findById(req.body.friendId)
+        .exec((err1, friend) => {
+          if (err1) res.status(500).json({ err1 })
+          const friendIds = user.friends.map((friendId) => { return friendId.toString() })
+          if (!friendIds.includes(friend.id.toString())) {
+            user.friends.push(friend.id)
+            user.save().then((result1) => {
+              friend.friends.push(user.id)
+              friend.save().then((result2) => {
+                res.send({
+                  id: friend._id,
+                  isFriend: true,
+                  name: friend.name,
+                  username: friend.username,
+                  key: friend._id,
+                })
+              })
+            }).catch((error) => {
+              res.status(500).json({ error })
+            })
+          }
+        })
+    }).catch((error) => {
+      res.status(500).json(error)
     })
 }

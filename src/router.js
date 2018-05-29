@@ -37,6 +37,12 @@ router.route('/friends/:id')
     // sends new notification
     Friends.sendAction(req, res)
   })
+
+router.route('/friends/accept/:id')
+  .put((req, res) => {
+    // accepts friend request
+    Friends.acceptRequest(req, res)
+  })
 router.route('/friends/:id&:username')
   .delete((req, res) => {
     // delete a certain friend
