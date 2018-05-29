@@ -19,7 +19,7 @@ const generateMessage = (state) => {
     case 'normal':
       return 'Just chilling'
     case 'sad':
-      return 'I\'m not feeling to well'
+      return 'I\'m not feeling too well'
     default:
       return 'I don\'t have enough information'
   }
