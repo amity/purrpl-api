@@ -45,6 +45,20 @@ export const getUsers = (req, res) => {
     })
 }
 
+export const fetchUser = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) res.send(null)
+      res.json({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        notifications: user.notifications,
+        visible: user.visible,
+      })
+    })
+}
+
 export const randomUser = (req, res) => {
   User.findOne({})
     .exec((err, user) => {

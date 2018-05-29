@@ -57,11 +57,7 @@ router.route('/users/:id&:search')
 router.route('/user/:id')
   .get((req, res) => {
     // get user object
-    res.send({ message: 'get user object' })
-  })
-  .put((req, res) => {
-    // update the user
-    res.send({ message: 'update the user' })
+    UserController.fetchUser(req, res)
   })
 
 router.route('/user/notifications/:id')
