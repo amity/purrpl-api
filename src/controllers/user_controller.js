@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import User from './../models/user_model'
 import Reminder from './../models/reminder_model'
 import Progress from './../models/progress_model'
+import Avatar from '../models/avatar_model'
 
 
 dotenv.config({ silent: true })
@@ -45,6 +46,22 @@ export const getUsers = (req, res) => {
     })
 }
 
+export const fetchUser = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) res.send(null)
+      console.log(user)
+      res.json({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        notifications: user.notifications,
+        visible: user.visible,
+        avatar: user.avatar,
+      })
+    })
+}
+
 export const randomUser = (req, res) => {
   User.findOne({})
     .exec((err, user) => {
@@ -55,6 +72,7 @@ export const randomUser = (req, res) => {
         username: user.username,
         notifications: user.notifications,
         visible: user.visible,
+        avatar: user.avatar,
       })
     })
 }
@@ -67,6 +85,7 @@ export const signin = (req, res, next) => {
     id: req.user._id,
     notifications: req.user.notifications,
     visible: req.user.visible,
+    avatar: req.user.avatar,
   })
 }
 
@@ -89,17 +108,21 @@ export const signup = (req, res, next) => {
           })
           Promise.all(remindersPromises).then((results) => {
             user.reminders = results.map((item) => { return item._id })
-            user.save()
-              .then((response) => {
-                res.send({
-                  token: tokenForUser(user),
-                  id: response.id,
-                  name: response.name,
-                  username: response.username,
-                  notifications: response.notifications,
-                  visible: response.visible,
+            new Avatar({ userId: user._id }).save().then((savedAvatar) => {
+              user.avatar = savedAvatar._id
+              user.save()
+                .then((response) => {
+                  res.send({
+                    token: tokenForUser(user),
+                    id: response.id,
+                    name: response.name,
+                    username: response.username,
+                    notifications: response.notifications,
+                    visible: response.visible,
+                    avatar: response.avatar,
+                  })
                 })
-              })
+            })
           })
         })
       } else {
@@ -124,6 +147,7 @@ export const toggleNotifications = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
@@ -142,6 +166,7 @@ export const updateVisibility = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
