@@ -50,6 +50,7 @@ export const fetchUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) res.send(null)
+      console.log(user)
       res.json({
         id: user._id,
         name: user.name,
@@ -107,19 +108,21 @@ export const signup = (req, res, next) => {
           })
           Promise.all(remindersPromises).then((results) => {
             user.reminders = results.map((item) => { return item._id })
-            user.avatar = new Avatar({ userId: user._id })
-            user.save()
-              .then((response) => {
-                res.send({
-                  token: tokenForUser(user),
-                  id: response.id,
-                  name: response.name,
-                  username: response.username,
-                  notifications: response.notifications,
-                  visible: response.visible,
-                  avatar: response.avatar,
+            new Avatar({ userId: user._id }).save().then((savedAvatar) => {
+              user.avatar = savedAvatar._id
+              user.save()
+                .then((response) => {
+                  res.send({
+                    token: tokenForUser(user),
+                    id: response.id,
+                    name: response.name,
+                    username: response.username,
+                    notifications: response.notifications,
+                    visible: response.visible,
+                    avatar: response.avatar,
+                  })
                 })
-              })
+            })
           })
         })
       } else {
