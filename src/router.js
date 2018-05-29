@@ -10,7 +10,6 @@ import { requireSignin } from './services/passport';
 const router = Router()
 
 router.get('/', (req, res) => {
-  console.log('what the')
   res.json({ message: 'welcome to our blog api' })
 })
 
