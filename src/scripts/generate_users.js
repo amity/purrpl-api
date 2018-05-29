@@ -143,4 +143,3 @@ const createUsersPromises = users.map((user) => {
 Promise.all(createUsersPromises).then((result) => {
   console.log('REMEMBER TO END THIS SCRIPT: Command ctrl+c')
 })
-
