@@ -50,7 +50,6 @@ export const fetchUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) res.send(null)
-      console.log(user)
       res.json({
         id: user._id,
         name: user.name,
@@ -233,7 +232,6 @@ export const deleteNotification = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       const cleanedNotifications = user.notifications.notifs.filter((item) => {
-        console.log(item._id)
         if (item._id.toString() !== req.params.notificationId.toString()) {
           return item
         }

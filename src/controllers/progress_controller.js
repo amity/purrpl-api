@@ -49,10 +49,8 @@ export const addFeelingToday = (req, res) => {
             progress.feelingToday.pop()
             progress.set({ feelingToday: [...progress.feelingToday, rating] })
           } else {
-            console.log('fail\n')
             progress.set({ feelingToday: [...progress.feelingToday, rating] })
           }
-          console.log('what\n')
           progress.save().then((result) => {
             res.json(result)
           })
