@@ -56,15 +56,13 @@ router.route('/user/:id')
   })
 
 router.route('/user/notifications/:id')
-  .put((req, res) => {
-    // toggle user's notifications
-    UserController.toggleNotifications(req, res)
-  })
-
-router.route('/user/notifications/:id')
   .get((req, res) => {
     // get the user's notifications
     UserController.fetchNotifications(req, res)
+  })
+  .put((req, res) => {
+    // toggle user's notifications
+    UserController.toggleNotifications(req, res)
   })
 
 router.route('/user/visible/:id')

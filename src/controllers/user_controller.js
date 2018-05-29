@@ -196,8 +196,10 @@ const generateMessage = (user, action) => {
       return `${user} is sending affirmation`
     case 'encourage':
       return `${user} is sending encouragement`
+    case 'friend':
+      return `${user} wants to be friends`
     default:
-      return `${user} is thinking about you`
+      return `${user} is thinking of you`
   }
 }
 
@@ -212,6 +214,7 @@ export const fetchNotifications = (req, res) => {
           const foundNotificationChunk = user.notifications.notifs.find((element) => { return element.senderId.toString() === value._id.toString() })
           return {
             id: foundNotificationChunk._id,
+            key: foundNotificationChunk._id,
             senderId: foundNotificationChunk.senderId,
             action: foundNotificationChunk.action,
             senderUsername: value.username,
