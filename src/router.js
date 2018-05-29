@@ -3,6 +3,7 @@ import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
 import * as Friends from './controllers/friends_controller';
 import * as Progress from './controllers/progress_controller';
+import fetchAvatar from './controllers/avatar_controller'
 import getWeather from './controllers/weather_controller';
 import { requireSignin } from './services/passport';
 
@@ -151,6 +152,12 @@ router.route('/progress/completion/:id')
     // adds a new completion object
     Progress.addDailyCompletion(req, res)
     res.send({ message: 'have you completed all your reminders?' })
+  })
+
+router.route('/avatar/:id')
+  .get((req, res) => {
+    // gets user's avatar object
+    fetchAvatar(req, res)
   })
 
 export default router
