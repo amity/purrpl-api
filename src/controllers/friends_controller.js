@@ -89,7 +89,7 @@ export const sendAction = (req, res) => {
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // updates destination user's notifications list
-      user.notifications.notifs.push(req.body.action)
+      user.notifications.notifs.push({ senderId: req.params.id, action: req.body.action, time: Date.now() })
       user.set({ notifications: user.notifications })
       user.save()
         .then((result) => {

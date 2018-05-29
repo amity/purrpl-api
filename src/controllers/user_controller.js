@@ -188,11 +188,40 @@ const fix = (notifications) => {
   });
 };
 
+const generateMessage = (user, action) => {
+  switch (action) {
+    case 'concern':
+      return `${user} is sending concern`
+    case 'affirm':
+      return `${user} is sending affirmation`
+    case 'encourage':
+      return `${user} is sending encouragement`
+    default:
+      return `${user} is thinking about you`
+  }
+}
+
 export const fetchNotifications = (req, res) => {
   User.findById(req.params.id)
-    .populate('notifications.senderId')
-    .exec((err, user) => {
-      if (err) res.status(500).json({ err })
-      res.send(fix(user.notifications))
+    .then((user) => {
+      const notificationsPromises = user.notifications.notifs.map((item) => {
+        return User.findById(item.senderId)
+      })
+      Promise.all(notificationsPromises).then((values) => {
+        const formattedNotifications = values.map((value) => {
+          const foundNotificationChunk = user.notifications.notifs.find((element) => { return element.senderId.toString() === value._id.toString() })
+          return {
+            id: foundNotificationChunk._id,
+            senderId: foundNotificationChunk.senderId,
+            action: foundNotificationChunk.action,
+            senderUsername: value.username,
+            senderName: value.name,
+            message: generateMessage(value.name, foundNotificationChunk.action),
+          }
+        })
+        res.send(formattedNotifications)
+      })
+    }).catch((error) => {
+      res.status(500).json(error)
     })
 }
