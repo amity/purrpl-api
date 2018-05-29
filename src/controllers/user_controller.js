@@ -176,17 +176,17 @@ export const updateVisibility = (req, res) => {
 
 // update with friends' avatar?
 // sort by date?
-const fix = (notifications) => {
-  return notifications.map((notification) => {
-    return {
-      _id: notification._id,
-      name: notification.senderId.name,
-      username: notification.senderId.username,
-      action: notification.action,
-      time: notification.time,
-    };
-  });
-};
+// const fix = (notifications) => {
+//   return notifications.map((notification) => {
+//     return {
+//       _id: notification._id,
+//       name: notification.senderId.name,
+//       username: notification.senderId.username,
+//       action: notification.action,
+//       time: notification.time,
+//     };
+//   });
+// };
 
 const generateMessage = (user, action) => {
   switch (action) {
