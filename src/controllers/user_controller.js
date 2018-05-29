@@ -176,23 +176,71 @@ export const updateVisibility = (req, res) => {
 
 // update with friends' avatar?
 // sort by date?
-const fix = (notifications) => {
-  return notifications.map((notification) => {
-    return {
-      _id: notification._id,
-      name: notification.senderId.name,
-      username: notification.senderId.username,
-      action: notification.action,
-      time: notification.time,
-    };
-  });
-};
+// const fix = (notifications) => {
+//   return notifications.map((notification) => {
+//     return {
+//       _id: notification._id,
+//       name: notification.senderId.name,
+//       username: notification.senderId.username,
+//       action: notification.action,
+//       time: notification.time,
+//     };
+//   });
+// };
+
+const generateMessage = (user, action) => {
+  switch (action) {
+    case 'concern':
+      return `${user} is sending concern`
+    case 'affirm':
+      return `${user} is sending affirmation`
+    case 'encourage':
+      return `${user} is sending encouragement`
+    case 'friend':
+      return `${user} wants to be friends`
+    default:
+      return `${user} is thinking of you`
+  }
+}
 
 export const fetchNotifications = (req, res) => {
   User.findById(req.params.id)
-    .populate('notifications.senderId')
-    .exec((err, user) => {
-      if (err) res.status(500).json({ err })
-      res.send(fix(user.notifications))
+    .then((user) => {
+      const notificationsPromises = user.notifications.notifs.map((item) => {
+        return User.findById(item.senderId)
+      })
+      Promise.all(notificationsPromises).then((values) => {
+        const formattedNotifications = values.map((value) => {
+          const foundNotificationChunk = user.notifications.notifs.find((element) => { return element.senderId.toString() === value._id.toString() })
+          return {
+            id: foundNotificationChunk._id,
+            key: foundNotificationChunk._id,
+            senderId: foundNotificationChunk.senderId,
+            action: foundNotificationChunk.action,
+            senderUsername: value.username,
+            senderName: value.name,
+            message: generateMessage(value.name, foundNotificationChunk.action),
+          }
+        })
+        res.send(formattedNotifications)
+      })
+    }).catch((error) => {
+      res.status(500).json(error)
+    })
+}
+
+export const deleteNotification = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      const cleanedNotifications = user.notifications.notifs.filter((item) => {
+        console.log(item._id)
+        if (item._id.toString() !== req.params.notificationId.toString()) {
+          return item
+        }
+      })
+      user.notifications.notifs = cleanedNotifications
+      user.save().then((result) => {
+        res.json({ message: 'notification has been removed' })
+      })
     })
 }

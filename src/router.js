@@ -18,12 +18,6 @@ router.get('/', (req, res) => {
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
 
-router.route('/notifcations/:id')
-  .get((req, res) => {
-    // get the user's notifications
-    UserController.fetchNotifications(req, res)
-  })
-
 router.route('/weather/:lat&:long')
   .get((req, res) => {
     // get user's local temperature
@@ -42,6 +36,12 @@ router.route('/friends/:id')
   .put((req, res) => {
     // sends new notification
     Friends.sendAction(req, res)
+  })
+
+router.route('/friends/accept/:id')
+  .put((req, res) => {
+    // accepts friend request
+    Friends.acceptRequest(req, res)
   })
 router.route('/friends/:id&:username')
   .delete((req, res) => {
@@ -62,11 +62,19 @@ router.route('/user/:id')
   })
 
 router.route('/user/notifications/:id')
+  .get((req, res) => {
+    // get the user's notifications
+    UserController.fetchNotifications(req, res)
+  })
   .put((req, res) => {
     // toggle user's notifications
     UserController.toggleNotifications(req, res)
   })
-
+router.route('/user/notifications/:id&:notificationId')
+  .delete((req, res) => {
+    // delete notification
+    UserController.deleteNotification(req, res)
+  })
 router.route('/user/visible/:id')
   .put((req, res) => {
     // update the user's visibility
