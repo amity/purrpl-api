@@ -113,3 +113,15 @@ export const updateProgress = (req, res) => {
       res.status(500).json({ err })
     })
 }
+
+export const getDailyCompletion = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      Progress.findById(user.progress)
+        .then((progress) => {
+          res.send(progress.dailyReminderCompletion)
+        }).catch((error) => {
+          res.status(500).json(error)
+        })
+    })
+}

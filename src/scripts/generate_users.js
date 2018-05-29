@@ -3,6 +3,7 @@ import moment from 'moment'
 import User from './../models/user_model'
 import Progress from './../models/progress_model'
 import Reminder from './../models/reminder_model'
+import Avatar from './../models/avatar_model'
 
 const mongoDB = 'mongodb://localhost/blackmirror'
 mongoose.connect(mongoDB)
@@ -131,7 +132,10 @@ const createUsersPromises = users.map((user) => {
     })
     Promise.all(reminderPromises).then((results) => {
       newUser.reminders = results.map((item) => { return item._id })
-      return newUser.save()
+      new Avatar({ userId: newUser._id }).save().then((savedAvatar) => {
+        newUser.avatar = savedAvatar._id
+        return newUser.save()
+      })
     })
   })
 })
@@ -139,4 +143,3 @@ const createUsersPromises = users.map((user) => {
 Promise.all(createUsersPromises).then((result) => {
   console.log('REMEMBER TO END THIS SCRIPT: Command ctrl+c')
 })
-

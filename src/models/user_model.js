@@ -14,9 +14,9 @@ const UserSchema = new Schema({
       time: Date,
     }],
   },
-  plant: { type: Number },
-  friends: [{ type: Schema.Types.ObjectId, ref: 'Friends' }],
-  progress: { type: Schema.Types.ObjectId, res: 'Progress' },
+  avatar: { type: Schema.Types.ObjectId, ref: 'Avatar' },
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  progress: { type: Schema.Types.ObjectId, ref: 'Progress' },
   reminders: [{ type: Schema.Types.ObjectId, ref: 'Reminder' }],
   receivedAction: { type: Boolean },
 })
