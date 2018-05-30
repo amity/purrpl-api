@@ -3,6 +3,7 @@ import * as UserController from './controllers/user_controller';
 import * as Reminders from './controllers/reminder_controller';
 import * as Friends from './controllers/friends_controller';
 import * as Progress from './controllers/progress_controller';
+import fetchAvatar from './controllers/avatar_controller'
 import getWeather from './controllers/weather_controller';
 import { requireSignin } from './services/passport';
 
@@ -16,12 +17,6 @@ router.get('/', (req, res) => {
 
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
-
-router.route('/notifcations/:id')
-  .get((req, res) => {
-    // get the user's notifications
-    UserController.fetchNotifications(req, res)
-  })
 
 router.route('/weather/:lat&:long')
   .get((req, res) => {
@@ -42,6 +37,12 @@ router.route('/friends/:id')
     // sends new notification
     Friends.sendAction(req, res)
   })
+
+router.route('/friends/accept/:id')
+  .put((req, res) => {
+    // accepts friend request
+    Friends.acceptRequest(req, res)
+  })
 router.route('/friends/:id&:username')
   .delete((req, res) => {
     // delete a certain friend
@@ -57,19 +58,23 @@ router.route('/users/:id&:search')
 router.route('/user/:id')
   .get((req, res) => {
     // get user object
-    res.send({ message: 'get user object' })
-  })
-  .put((req, res) => {
-    // update the user
-    res.send({ message: 'update the user' })
+    UserController.fetchUser(req, res)
   })
 
 router.route('/user/notifications/:id')
+  .get((req, res) => {
+    // get the user's notifications
+    UserController.fetchNotifications(req, res)
+  })
   .put((req, res) => {
     // toggle user's notifications
     UserController.toggleNotifications(req, res)
   })
-
+router.route('/user/notifications/:id&:notificationId')
+  .delete((req, res) => {
+    // delete notification
+    UserController.deleteNotification(req, res)
+  })
 router.route('/user/visible/:id')
   .put((req, res) => {
     // update the user's visibility
@@ -155,6 +160,12 @@ router.route('/progress/completion/:id')
     // adds a new completion object
     Progress.addDailyCompletion(req, res)
     res.send({ message: 'have you completed all your reminders?' })
+  })
+
+router.route('/avatar/:id')
+  .get((req, res) => {
+    // gets user's avatar object
+    fetchAvatar(req, res)
   })
 
 export default router

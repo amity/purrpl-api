@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import User from './../models/user_model'
 import Reminder from './../models/reminder_model'
 import Progress from './../models/progress_model'
+import Avatar from '../models/avatar_model'
 
 
 dotenv.config({ silent: true })
@@ -45,6 +46,21 @@ export const getUsers = (req, res) => {
     })
 }
 
+export const fetchUser = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) res.send(null)
+      res.json({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        notifications: user.notifications,
+        visible: user.visible,
+        avatar: user.avatar,
+      })
+    })
+}
+
 export const randomUser = (req, res) => {
   User.findOne({})
     .exec((err, user) => {
@@ -55,6 +71,7 @@ export const randomUser = (req, res) => {
         username: user.username,
         notifications: user.notifications,
         visible: user.visible,
+        avatar: user.avatar,
       })
     })
 }
@@ -67,6 +84,7 @@ export const signin = (req, res, next) => {
     id: req.user._id,
     notifications: req.user.notifications,
     visible: req.user.visible,
+    avatar: req.user.avatar,
   })
 }
 
@@ -89,17 +107,21 @@ export const signup = (req, res, next) => {
           })
           Promise.all(remindersPromises).then((results) => {
             user.reminders = results.map((item) => { return item._id })
-            user.save()
-              .then((response) => {
-                res.send({
-                  token: tokenForUser(user),
-                  id: response.id,
-                  name: response.name,
-                  username: response.username,
-                  notifications: response.notifications,
-                  visible: response.visible,
+            new Avatar({ userId: user._id }).save().then((savedAvatar) => {
+              user.avatar = savedAvatar._id
+              user.save()
+                .then((response) => {
+                  res.send({
+                    token: tokenForUser(user),
+                    id: response.id,
+                    name: response.name,
+                    username: response.username,
+                    notifications: response.notifications,
+                    visible: response.visible,
+                    avatar: response.avatar,
+                  })
                 })
-              })
+            })
           })
         })
       } else {
@@ -124,6 +146,7 @@ export const toggleNotifications = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
@@ -142,6 +165,7 @@ export const updateVisibility = (req, res) => {
           username: response.username,
           notifications: response.notifications,
           visible: response.visible,
+          avatar: response.avatar,
         })
       }).catch((error) => {
         res.status(500).json(error)
@@ -151,23 +175,70 @@ export const updateVisibility = (req, res) => {
 
 // update with friends' avatar?
 // sort by date?
-const fix = (notifications) => {
-  return notifications.map((notification) => {
-    return {
-      _id: notification._id,
-      name: notification.senderId.name,
-      username: notification.senderId.username,
-      action: notification.action,
-      time: notification.time,
-    };
-  });
-};
+// const fix = (notifications) => {
+//   return notifications.map((notification) => {
+//     return {
+//       _id: notification._id,
+//       name: notification.senderId.name,
+//       username: notification.senderId.username,
+//       action: notification.action,
+//       time: notification.time,
+//     };
+//   });
+// };
+
+const generateMessage = (user, action) => {
+  switch (action) {
+    case 'concern':
+      return `${user} is sending concern`
+    case 'affirm':
+      return `${user} is sending affirmation`
+    case 'encourage':
+      return `${user} is sending encouragement`
+    case 'friend':
+      return `${user} wants to be friends`
+    default:
+      return `${user} is thinking of you`
+  }
+}
 
 export const fetchNotifications = (req, res) => {
   User.findById(req.params.id)
-    .populate('notifications.senderId')
-    .exec((err, user) => {
-      if (err) res.status(500).json({ err })
-      res.send(fix(user.notifications))
+    .then((user) => {
+      const notificationsPromises = user.notifications.notifs.map((item) => {
+        return User.findById(item.senderId)
+      })
+      Promise.all(notificationsPromises).then((values) => {
+        const formattedNotifications = values.map((value) => {
+          const foundNotificationChunk = user.notifications.notifs.find((element) => { return element.senderId.toString() === value._id.toString() })
+          return {
+            id: foundNotificationChunk._id,
+            key: foundNotificationChunk._id,
+            senderId: foundNotificationChunk.senderId,
+            action: foundNotificationChunk.action,
+            senderUsername: value.username,
+            senderName: value.name,
+            message: generateMessage(value.name, foundNotificationChunk.action),
+          }
+        })
+        res.send(formattedNotifications)
+      })
+    }).catch((error) => {
+      res.status(500).json(error)
+    })
+}
+
+export const deleteNotification = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      const cleanedNotifications = user.notifications.notifs.filter((item) => {
+        if (item._id.toString() !== req.params.notificationId.toString()) {
+          return item
+        }
+      })
+      user.notifications.notifs = cleanedNotifications
+      user.save().then((result) => {
+        res.json({ message: 'notification has been removed' })
+      })
     })
 }

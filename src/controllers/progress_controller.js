@@ -39,7 +39,18 @@ export const addFeelingToday = (req, res) => {
     .then((user) => {
       Progress.findById(user.progress)
         .then((progress) => {
-          progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
+          const today = new Date();
+          const rating = {
+            timestamp: today,
+            value: req.body.rating,
+          }
+          // check to make sure only one rating per day
+          if (progress.feelingToday.length > 0 && progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() === rating.timestamp.getDate()) {
+            progress.feelingToday.pop()
+            progress.set({ feelingToday: [...progress.feelingToday, rating] })
+          } else {
+            progress.set({ feelingToday: [...progress.feelingToday, rating] })
+          }
           progress.save().then((result) => {
             res.json(result)
           }).catch((error) => {
@@ -97,6 +108,7 @@ const generateMessage = (value) => {
   }
 }
 
+// average
 export const getFeelingToday = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
@@ -108,7 +120,8 @@ export const getFeelingToday = (req, res) => {
             return today.value
           })
           averageValue = dailyFeelings.length >= 7 ? Math.round(averageValue / dailyFeelings.length) : -1
-          res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue) })
+          const today = progress.feelingToday.length > 0 ? progress.feelingToday[progress.feelingToday.length - 1].timestamp : null
+          res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue), date: today })
         }).catch((error) => {
           res.status(500).send(error)
         })
