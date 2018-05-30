@@ -53,6 +53,8 @@ export const addFeelingToday = (req, res) => {
           }
           progress.save().then((result) => {
             res.json(result)
+          }).catch((error) => {
+            res.status(500).send(error)
           })
         }).catch((error) => {
           res.status(500).send(error)
