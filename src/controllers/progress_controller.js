@@ -93,7 +93,7 @@ export const getFeelingToday = (req, res) => {
             return today.value
           })
           averageValue = dailyFeelings.length >= 7 ? Math.round(averageValue / dailyFeelings.length) : -1
-          const today = progress.feelingToday.length > 0 ? progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() : -1
+          const today = progress.feelingToday.length > 0 ? progress.feelingToday[progress.feelingToday.length - 1].timestamp : null
           res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue), date: today })
         }).catch((error) => {
           res.status(500).send(error)
