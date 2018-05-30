@@ -2,12 +2,10 @@ import User from './../models/user_model'
 
 export const getFriends = (req, res) => {
   // finds main user
-  console.log(req.params.id)
   User.findById(req.params.id)
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // searches database for all friends
-      console.log(user)
       const friendPromises = user.friends.map((friendId) => {
         return User.findById(friendId)
       })
