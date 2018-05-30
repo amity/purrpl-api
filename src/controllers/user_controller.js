@@ -13,6 +13,16 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user._id, iat: timestamp }, process.env.AUTH_SECRET)
 }
 
+export const deleteUser = (req, res) => {
+  User.remove({
+    _id: req.params.user_id,
+  }, (err, user) => {
+    if (err) return res.send(err);
+    res.json({ message: 'Your account has been successfully deleted.' });
+  });
+}
+
+
 export const getUsers = (req, res) => {
   const userId = req.params.id
   const searchTerm = req.params.search
