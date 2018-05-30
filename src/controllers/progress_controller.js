@@ -64,31 +64,6 @@ export const addFeelingToday = (req, res) => {
     })
 }
 
-export const updateFeelingToday = (req, res) => {
-  const userId = req.body.userId
-  const feelingToday = req.body.feelingToday
-  const reminderCompletion = req.body.reminderCompletion
-
-  User.findById(req.params.id)
-    .then((user) => {
-      Progress.findOne({ userId })
-        .then((dbProgress) => {
-          if (!dbProgress) res.status(409).send('Progress not found')
-          const progress = new Progress({ userId, feelingToday, reminderCompletion })
-          progress.save()
-            .then((result) => {
-              return res.send({ progress })
-            }).catch((err) => {
-              res.status(500).json({ err })
-            })
-        }).catch((err) => {
-          res.status(500).json({ err })
-        })
-    }).catch((err) => {
-      res.status(500).json({ err })
-    })
-}
-
 const generateMessage = (value) => {
   switch (value) {
     case 0:
