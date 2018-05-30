@@ -45,7 +45,7 @@ export const addFeelingToday = (req, res) => {
             value: req.body.rating,
           }
           // check to make sure only one rating per day
-          if (progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() === rating.timestamp.getDate()) {
+          if (progress.feelingToday.length > 1 && progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() === rating.timestamp.getDate()) {
             progress.feelingToday.pop()
             progress.set({ feelingToday: [...progress.feelingToday, rating] })
           } else {
@@ -93,7 +93,7 @@ export const getFeelingToday = (req, res) => {
             return today.value
           })
           averageValue = dailyFeelings.length >= 7 ? Math.round(averageValue / dailyFeelings.length) : -1
-          const today = progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate()
+          const today = progress.feelingToday.length > 1 ? progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() : -1
           res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue), date: today })
         }).catch((error) => {
           res.status(500).send(error)
