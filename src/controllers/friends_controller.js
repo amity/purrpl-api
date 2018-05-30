@@ -2,10 +2,12 @@ import User from './../models/user_model'
 
 export const getFriends = (req, res) => {
   // finds main user
+  console.log(req.params.id)
   User.findById(req.params.id)
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // searches database for all friends
+      console.log(user)
       const friendPromises = user.friends.map((friendId) => {
         return User.findById(friendId)
       })
@@ -58,7 +60,16 @@ export const sendAction = (req, res) => {
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // updates destination user's notifications list
-      user.notifications.notifs.push({ senderId: req.params.id, action: req.body.action.action, time: Date.now() })
+      if (user.notifications.notifs !== null) {
+        user.notifications.notifs.forEach((notification) => {
+          if (notification.senderId.toString() === req.params.id.toString() && notification.action === 'friend') {
+            res.status(208)
+          }
+        })
+
+        user.notifications.notifs.push({ senderId: req.params.id, action: req.body.action.action, time: Date.now() })
+      }
+
       user.set({ notifications: user.notifications })
       user.save()
         .then((result) => {
