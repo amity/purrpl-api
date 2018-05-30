@@ -58,8 +58,9 @@ export const sendAction = (req, res) => {
     .exec((err, user) => {
       if (err) res.status(500).json({ err })
       // updates destination user's notifications list
-      user.notifications.notifs.push({ senderId: req.params.id, action: req.body.action.action, time: Date.now() })
-      user.set({ notifications: user.notifications })
+      console.log(req.body.action.action)
+      user.notifications.notifs = [...user.notifications.notifs, { senderId: req.params.id, action: req.body.action.action, time: Date.now() }]
+      console.log(user.notifications.notifs)
       user.save()
         .then((result) => {
           res.json(result)
@@ -78,11 +79,6 @@ export const acceptRequest = (req, res) => {
           const friendIds = user.friends.map((friendId) => { return friendId.toString() })
           if (!friendIds.includes(friend.id.toString())) {
             user.friends.push(friend.id)
-            user.notifications.notifs = user.notifications.notifs.filter((item) => {
-              if (item.senderId.toString() === friend._id.toString() && item.action !== 'friend') {
-                return item
-              }
-            })
             user.save().then((result1) => {
               friend.friends.push(user.id)
               friend.save().then((result2) => {
