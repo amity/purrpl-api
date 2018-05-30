@@ -37,10 +37,8 @@ export const getProgress = (req, res) => {
 export const addFeelingToday = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      console.log(user)
       Progress.findById(user.progress)
         .then((progress) => {
-          console.log(progress)
           const today = new Date();
           const rating = {
             timestamp: today,
@@ -87,10 +85,8 @@ const generateMessage = (value) => {
 export const getFeelingToday = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      // console.log(user)
       Progress.findById(user.progress)
         .then((progress) => {
-          // console.log(progress)
           let averageValue = 0
           const dailyFeelings = progress.feelingToday.map((today) => {
             averageValue += today.value
@@ -98,14 +94,11 @@ export const getFeelingToday = (req, res) => {
           })
           averageValue = dailyFeelings.length >= 7 ? Math.round(averageValue / dailyFeelings.length) : -1
           const today = progress.feelingToday.length > 1 ? progress.feelingToday[progress.feelingToday.length - 1].timestamp.getDate() : -1
-          // console.log(today)
           res.json({ feelingToday: dailyFeelings, summary: generateMessage(averageValue), date: today })
         }).catch((error) => {
-          // console.log('error 1')
           res.status(500).send(error)
         })
     }).catch((error) => {
-      // console.log('error 2')
       res.status(500).send(error)
     })
 }
