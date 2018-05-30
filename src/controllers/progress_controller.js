@@ -42,6 +42,8 @@ export const addFeelingToday = (req, res) => {
           progress.set({ feelingToday: [...progress.feelingToday, req.body.feelingToday] })
           progress.save().then((result) => {
             res.json(result)
+          }).catch((error) => {
+            res.status(500).send(error)
           })
         }).catch((error) => {
           res.status(500).send(error)
@@ -65,10 +67,14 @@ export const updateFeelingToday = (req, res) => {
           progress.save()
             .then((result) => {
               return res.send({ progress })
+            }).catch((err) => {
+              res.status(500).json({ err })
             })
         }).catch((err) => {
           res.status(500).json({ err })
         })
+    }).catch((err) => {
+      res.status(500).json({ err })
     })
 }
 
