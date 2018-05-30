@@ -173,20 +173,6 @@ export const updateVisibility = (req, res) => {
     })
 }
 
-// update with friends' avatar?
-// sort by date?
-// const fix = (notifications) => {
-//   return notifications.map((notification) => {
-//     return {
-//       _id: notification._id,
-//       name: notification.senderId.name,
-//       username: notification.senderId.username,
-//       action: notification.action,
-//       time: notification.time,
-//     };
-//   });
-// };
-
 const generateMessage = (user, action) => {
   switch (action) {
     case 'concern':
@@ -202,6 +188,16 @@ const generateMessage = (user, action) => {
   }
 }
 
+const findSenderObject = (senderId, senders) => {
+  let senderObject = null
+  senders.forEach((item) => {
+    if (!senderObject && item._id.toString() === senderId.toString()) {
+      senderObject = item
+    }
+  })
+  return senderObject
+}
+
 export const fetchNotifications = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
@@ -209,16 +205,20 @@ export const fetchNotifications = (req, res) => {
         return User.findById(item.senderId)
       })
       Promise.all(notificationsPromises).then((values) => {
-        const formattedNotifications = values.map((value) => {
-          const foundNotificationChunk = user.notifications.notifs.find((element) => { return element.senderId.toString() === value._id.toString() })
+        const senderIds = values.map((item) => { return item._id.toString() })
+        const foundNotifications = user.notifications.notifs.filter((item) => {
+          return senderIds.includes(item.senderId.toString())
+        })
+        const formattedNotifications = foundNotifications.map((notification) => {
+          const senderObject = findSenderObject(notification.senderId, values)
           return {
-            id: foundNotificationChunk._id,
-            key: foundNotificationChunk._id,
-            senderId: foundNotificationChunk.senderId,
-            action: foundNotificationChunk.action,
-            senderUsername: value.username,
-            senderName: value.name,
-            message: generateMessage(value.name, foundNotificationChunk.action),
+            _id: notification._id,
+            key: notification._id,
+            senderId: notification.senderId,
+            action: notification.action,
+            senderUsername: senderObject.username,
+            name: senderObject.name,
+            message: generateMessage(senderObject.name, notification.action),
           }
         })
         res.send(formattedNotifications)

@@ -29,10 +29,6 @@ router.route('/friends/:id')
     // get user's friends
     Friends.getFriends(req, res)
   })
-  .post((req, res) => {
-    // add a new friend
-    Friends.createFriend(req, res)
-  })
   .put((req, res) => {
     // sends new notification
     Friends.sendAction(req, res)
