@@ -56,6 +56,9 @@ router.route('/user/:id')
     // get user object
     UserController.fetchUser(req, res)
   })
+  .delete((req, res) => {
+    UserController.deleteUser(req, res)
+  })
 
 router.route('/user/notifications/:id')
   .get((req, res) => {
