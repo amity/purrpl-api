@@ -1,4 +1,4 @@
-# Purple Gorilla 🦍
+# purrpl 🐱
 API backend for a React Native app for self-care!
 
 
@@ -28,8 +28,8 @@ API backend for a React Native app for self-care!
 ## Setup 🚀
 
 ```bash
-git clone https://github.com/dartmouth-cs52-18S/project-api-black-mirror.git
-cd project-api-black-mirror
+git clone https://github.com/dartmouth-cs52-18S/project-api-purple-gorilla.git
+cd project-api-purple-gorilla
 yarn
 yarn dev
 ```
