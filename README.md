@@ -1,6 +1,7 @@
 # purrpl 🐱
 API backend for a React Native app for self-care!
 
+![](https://i.imgur.com/b2QqScv.png)
 
 ## Architecture 🛠
   ### Models and Controllers:
