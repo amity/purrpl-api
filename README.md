@@ -1,5 +1,5 @@
 # purrpl 🐱
-API backend for a React Native app for self-care!
+API backend for a React Native app for self-care! React Native client at https://github.com/NateNeumann/purrpl-client.
 
 ![](https://i.imgur.com/b2QqScv.png)
 
