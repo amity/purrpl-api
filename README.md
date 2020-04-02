@@ -1,6 +1,7 @@
 # purrpl 🐱
-API backend for a React Native app for self-care!
+API backend for a React Native app for self-care! React Native client at https://github.com/soph-iest/purrpl-client.
 
+![](https://i.imgur.com/b2QqScv.png)
 
 ## Architecture 🛠
   ### Models and Controllers:
@@ -46,7 +47,7 @@ prod: yarn build; node src/server.js
 ## Authors 📝
 * Raul Rodgriguez '19
 * Ijemma Onwuzulike '19
-* Nate Neumann '20
+* Sophie Debs '20
 * Amy Guan '20
 * Christina Lu '20
 * Sofia Stanescu-Bellu '20
